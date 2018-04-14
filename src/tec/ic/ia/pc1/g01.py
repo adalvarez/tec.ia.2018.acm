@@ -83,6 +83,28 @@ def crear_estructura_votos_cantones(filename='./summaryJuntas.csv'):
         rangos_partido_canton[data[i][0]] = rangos_partido
         cantones.append(data[i][0])
         totales_canton.append(sum([int(y) for y in data[i][1:]]))
+    print("Totales canton")
+    print(totales_canton)
+    print("Cantones")
+    print(cantones)
+    print("Rangos partido canton")
+    print(rangos_partido_canton)
+    return totales_canton, cantones, rangos_partido_canton
+
+def crear_estructura_votos_cantones_ronda_2(filename='./summaryJuntasRonda2.csv'):
+    totales_canton = []
+    cantones = []
+    rangos_partido_canton = {}
+    data = readCSV(filename)
+    for i in range(1, len(data)):
+        rangos_partido = []
+        votos = 0
+        for j in data[i][1:]:
+            votos += int(j)
+            rangos_partido.append(votos)
+        rangos_partido_canton[data[i][0]] = rangos_partido
+        cantones.append(data[i][0])
+        totales_canton.append(sum([int(y) for y in data[i][1:]]))
     return totales_canton, cantones, rangos_partido_canton
 
 
@@ -270,6 +292,19 @@ def asignar_voto(rango_partidos, na=None):
             votos_final[tipo_voto[k]] += 1
             return tipo_voto[k]
 
+# Retorna un partido o tipo de voto para un votante
+def asignar_voto_ronda_2(rango_partidos, na=None):
+    numero_aleatorio = na if na is not None else randint(1, rango_partidos[-1])
+    tipo_voto = [        
+        "ACCION CIUDADANA",
+        "RESTAURACION NACIONAL",
+        "NULO",
+        "BLANCO"]
+    for k in range(len(rango_partidos)):
+        if numero_aleatorio <= rango_partidos[k]:
+            votos_final[tipo_voto[k]] += 1
+            return tipo_voto[k]
+
 # Utiliza todas las funciones anteriores para retornar un votante
 
 
@@ -345,6 +380,7 @@ def generar_votante(
     promedio_ocupantes = indices_cantones[canton]["promedio_ocupantes"]
 
     voto = asignar_voto(rangos_partido_canton[canton])
+    # votoRonda2 = 
 
     votante = [
         canton,
@@ -386,6 +422,8 @@ def generar_muestra_pais(n):
                 indices_cantones,
                 rangos_partido_canton))
     return votantes
+
+generar_muestra_pais(100)
 
 # Retorna una muestra de n votantes de los cantones de una provincia dada
 
