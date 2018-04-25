@@ -177,18 +177,6 @@ def crearArbol(data, attributes, target):
         
     return tree
 
-def builDecisionTreeFile(filename, target):
-    file = open(filename)
-    data = [[]]
-    for line in file:
-        line = line.strip("\r\n")
-        data.append(line.split(','))
-    data.remove([])
-    attributes = data[0]
-    data.remove(attributes)
-    #Recibe una lista de listas, los atributos, y el atributo que vamos a querer predecir
-    return crearArbol(data, attributes, target)
-
 def decisionTreeEvaluatorAux(tree, input, target):
 
     keyAtt = list(tree.keys())[0]
@@ -210,9 +198,7 @@ def decisionTreeEvaluator(tree, input, target):
     return decisionTreeEvaluatorAux(tempTree, input, target)
 
 def decisionTreePredictAux(tree, input):
-
     keyAtt = list(tree.keys())[0]
-    print(keyAtt)
     subTree = tree[keyAtt]
     inputValue = input[keyAtt]
     
@@ -230,10 +216,56 @@ def decisionTreePredict(tree, input):
     tempTree = tree.copy()
     return decisionTreePredictAux(tempTree, input)
 
-def main():
-    #De aqui para atras tenemos q reemplazarlo con el codigo de nuestro generador
-    tree = builDecisionTreeFile('datasets/ejemploLibro.csv', 'Y')
-    print(tree)
+def isLeaf(tree):
+    keyAtt = list(tree.keys())[0]
+    subTree = tree[keyAtt]
+    for key in subTree:
+        if(type(subTree[key]) is dict):
+            return False
+    return True
 
-if __name__ == '__main__':
-    main()
+def pruneTree(tree, threshold):
+    keyAtt = list(tree.keys())[0]
+    subTree = tree[keyAtt]
+    if(isLeaf(tree) is True):
+        if(subTree['__GI'] < threshold):
+            # debe ser podado
+            return subTree['__PL']
+        else:
+            return None
+    else:
+        nSubtrees = 0
+        nSubtreesPruned = 0
+        for key in subTree:
+            if(type(subTree[key]) is dict):
+                nSubtrees += 1
+                prune = pruneTree(subTree[key], threshold)
+                if(prune != None):
+                    subTree[key] = prune
+                    nSubtreesPruned +=1
+        if(nSubtrees == nSubtreesPruned and nSubtrees != 0):
+            if(subTree['__GI'] < threshold):
+                # debe ser podado
+                return subTree['__PL']
+            else:
+                return None
+
+def builDecisionTreeFile(filename, target):
+    file = open(filename)
+    data = [[]]
+    for line in file:
+        line = line.strip("\r\n")
+        data.append(line.split(','))
+    data.remove([])
+    attributes = data[0]
+    data.remove(attributes)
+    #Recibe una lista de listas, los atributos, y el atributo que vamos a querer predecir
+    return crearArbol(data, attributes, target)
+
+# def main():
+#     #De aqui para atras tenemos q reemplazarlo con el codigo de nuestro generador
+#     tree = builDecisionTreeFile('datasets/ejemploLibro.csv', 'Y')
+#     print(tree)
+
+# if __name__ == '__main__':
+#     main()
