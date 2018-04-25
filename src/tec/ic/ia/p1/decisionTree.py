@@ -100,7 +100,7 @@ def escogerInformacion(data, attributes, target):
             if newGain>maxGain:
                 maxGain = newGain
                 best = attr
-    return best
+    return best, maxGain
 
 #Retorna una lista con todos los posibles valores de un atributo
 def getValues(data, attributes, attr):
@@ -156,10 +156,10 @@ def crearArbol(data, attributes, target):
         return valores[0]
     else:
         # Elija el siguiente mejor atributo
-        best = escogerInformacion(data, attributes, target)
+        best, maxGain = escogerInformacion(data, attributes, target)
 
         # Creamos un nuevo nodo con el mejor atributo
-        tree = {best:{}}
+        tree = {best:{'__GI':maxGain, '__PL':default}}
 
         # Verificamos si hay nodos que falten de agregar
         valoresActuales = getValues(data, attributes, best)
@@ -191,7 +191,7 @@ def builDecisionTreeFile(filename, target):
 
 def main():
     #De aqui para atras tenemos q reemplazarlo con el codigo de nuestro generador
-    tree = builDecisionTreeFile('datasets/examenDataset.csv', 'Compra')
+    tree = builDecisionTreeFile('datasets/ejemploLibro.csv', 'Y')
     print(tree)
 
 if __name__ == '__main__':
