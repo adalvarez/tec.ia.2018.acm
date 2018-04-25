@@ -189,6 +189,47 @@ def builDecisionTreeFile(filename, target):
     #Recibe una lista de listas, los atributos, y el atributo que vamos a querer predecir
     return crearArbol(data, attributes, target)
 
+def decisionTreeEvaluatorAux(tree, input, target):
+
+    keyAtt = list(tree.keys())[0]
+    subTree = tree[keyAtt]
+    inputValue = input[keyAtt]
+    
+    if(inputValue not in subTree):
+        # Es un nuevo caso no visto del branch
+        return subTree['__PL'] == input[target]
+    branch = subTree[inputValue]
+
+    if(type(branch) is dict):
+        return decisionTreeEvaluatorAux(branch, input, target)
+    else:
+        return branch == input[target]
+
+def decisionTreeEvaluator(tree, input, target):
+    tempTree = tree.copy()
+    return decisionTreeEvaluatorAux(tempTree, input, target)
+
+def decisionTreePredictAux(tree, input):
+
+    keyAtt = list(tree.keys())[0]
+    print(keyAtt)
+    subTree = tree[keyAtt]
+    inputValue = input[keyAtt]
+    
+    if(inputValue not in subTree):
+        # Es un nuevo caso no visto del branch
+        return subTree['__PL']
+    branch = subTree[inputValue]
+
+    if(type(branch) is dict):
+        return decisionTreePredictAux(branch, input)
+    else:
+        return branch
+
+def decisionTreePredict(tree, input):
+    tempTree = tree.copy()
+    return decisionTreePredictAux(tempTree, input)
+
 def main():
     #De aqui para atras tenemos q reemplazarlo con el codigo de nuestro generador
     tree = builDecisionTreeFile('datasets/ejemploLibro.csv', 'Y')
