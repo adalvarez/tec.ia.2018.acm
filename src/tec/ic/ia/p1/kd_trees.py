@@ -67,6 +67,7 @@ def kd_tree_punto_mas_cercano(raiz, punto, profundidad, cantidad_dimensiones):
   rama_siguiente = None
   rama_opuesta = None
 
+  #Definimos a q rama pertenece el punto de entrada, y seteamos como rama opuesta, a la q no pertenece
   if punto[dimension] < raiz['punto'][dimension]:
     rama_siguiente = raiz['left']
     rama_opuesta = raiz['right']
@@ -76,8 +77,10 @@ def kd_tree_punto_mas_cercano(raiz, punto, profundidad, cantidad_dimensiones):
 
   punto_cercano = distancia_mas_cercana(punto, kd_tree_punto_mas_cercano(rama_siguiente, punto, profundidad + 1, cantidad_dimensiones), raiz['punto'])
 
+  #Verificamos si hay un punto aun mas cercano al encontrado, en la rama opuesta.
+  #Esto puede darse si la distancia entre del mejor actual es mayor, que la distancia entre el punto de entrada, y el punto de ramificacion
   if calcular_distancia(punto, punto_cercano) > abs(punto[dimension] - raiz['punto'][dimension]):
-        punto_cercano = distancia_mas_cercana(punto, kd_tree_punto_mas_cercano(rama_opuesta, punto,profundidad + 1), punto_cercano)
+        punto_cercano = distancia_mas_cercana(punto, kd_tree_punto_mas_cercano(rama_opuesta, punto,profundidad + 1, cantidad_dimensiones), punto_cercano)
 
   return punto_cercano
 
@@ -85,8 +88,11 @@ def kd_tree_punto_mas_cercano(raiz, punto, profundidad, cantidad_dimensiones):
 
 
 
-kd_tree = construir_kd_tree([[3,6],[17,15],[13,15],[6,12],[9,1],[2,7],[10,19]], 0, 2)
-print(kd_tree)
+#kd_tree = construir_kd_tree([[40,70],[70,130],[90,40],[110,100],[140,110],[150,30],[160,100]], 0, 2)
+#punto = [140,90]
+#punto_cercano = kd_tree_punto_mas_cercano(kd_tree, punto , 0, 2)
 
+print(kd_tree)
+print(punto_cercano)
 
 
