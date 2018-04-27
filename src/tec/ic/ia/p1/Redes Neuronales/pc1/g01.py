@@ -414,83 +414,73 @@ from sklearn.preprocessing import OneHotEncoder
 from keras.utils import to_categorical
 import numpy
 import tensorflow as tf
-
+import pandas as pd
 # fix random seed for reproducibility
 numpy.random.seed(7)
 
 def prueba(n, capas, unidadCapas, activacion):
-	X = sustituir()
-	Y = []
-	for i in X:
-	    Y.append(i[-1])
-	    del i[-1]
-	X = numpy.asarray(X)
-	Y = numpy.asarray(Y)
-	#dataset = numpy.loadtxt("refactorizado.csv", delimiter=",")
-	# split into input (X) and output (Y) variables
-	#X = dataset[:,0:19]
-	#Y = dataset[:,19]
-	Y = array(Y)
-	encoded = to_categorical(Y)
-	print("Elemetos de x")
-	print(X)
-	print("Elemetos de y")
-	print(encoded)
-	# create model
-	model = Sequential()
-	model.add(Dense(unidadCapas, input_dim=19, activation=activacion))
+    X = sustituir()
+    Y = []
+    for i in X:
+        Y.append(i[-1])
+        numpy.delete(i, -1)
+    X = numpy.asarray(X)
+    Y = numpy.asarray(Y)
+    onehot_encoder = OneHotEncoder(sparse=False)
+    voto = array(Y)
+    voto = voto.reshape(len(voto), 1)
+    voto = onehot_encoder.fit_transform(voto)
 
-	for i in range(capas):
-	    model.add(Dense(unidadCapas, activation = activacion))
+    # create model
+    model = Sequential()
+    model.add(Dense(unidadCapas, input_dim=len(X[0]), activation=activacion))
 
-	model.add(Dense(len(encoded[0]), activation="softmax"))
-	# Compile model
-	model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-	# Fit the model
-	model.fit(X, encoded, epochs=150, batch_size=10)
-	# evaluate the model
-	scores = model.evaluate(X, encoded)
-	print(scores)
-	print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+    for i in range(capas):
+        model.add(Dense(unidadCapas, activation = activacion))
+
+    model.add(Dense(len(voto[0]), activation="softmax"))
+    # Compile model
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+    # Fit the model
+    model.fit(X[:40000], voto[:40000], epochs=150, batch_size=10)
+    # evaluate the model
+    scores = model.evaluate(X[10000:], voto[10000:])
+    print(scores)
+    print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 
 
-def sustituir():
-    muestras = generar_muestra_pais(50000)
+
+def sustituir(muestras):
+    #muestras = generar_muestra_pais(50000)
 
     salida = []
-    """
-    datosCambiantes = {"SI":1, "NO":0, "URBANA":0, "RURAL":1, "M":1, "F":0, "MUJER":1, "HOMBRE":0, "COMPARTIDO":2, 
-    					"RESTAURACION NACIONAL":0,"ACCION CIUDADANA":1,"LIBERACION NACIONAL":2,"UNIDAD SOCIAL CRISTIANA":3,
-    					"INTEGRACION NACIONAL":4,"REPUBLICANO SOCIAL CRISTIANO":5,"MOVIMIENTO LIBERTARIO":6,"FRENTE AMPLIO":7,
-    					"NUEVA GENERACION":8,"ALIANZA DEMOCRATA CRISTIANA":9,"RENOVACION COSTARRICENSE":10,"ACCESIBILIDAD SIN EXCLUSION":11,
-    					"DE LOS TRABAJADORES":12,"NULO":13,"BLANCO":14}
-    """
-    #print(muestras)
     muestrasT = numpy.transpose(muestras)
-    #print(muestrasT)
     #transformarlo a numeros
     label_encoder = LabelEncoder()
     min_max_scaler = preprocessing.MinMaxScaler()
-    cantones = label_encoder.fit_transform(muestrasT[0])
+    cantones = label_encoder.fit_transform(muestrasT[0])#no es transpuesta porque hay que volver a transformarla para hacerla binaria
     genero = label_encoder.fit_transform(muestrasT[1])[numpy.newaxis, :].T##transpuesta
     #normalizar edad
     edad = muestrasT[2].astype(float).reshape(-1,1)
-    edad = min_max_scaler.fit_transform(edad)
-    #edad = edad.T
-
+    edad = min_max_scaler.fit_transform(edad)#ya queda esta transpuesto
     zona = label_encoder.fit_transform(muestrasT[3])[numpy.newaxis, :].T##transpuesta
     dependiente = label_encoder.fit_transform(muestrasT[4])[numpy.newaxis, :].T##transpuesta
     casaEstado = label_encoder.fit_transform(muestrasT[5])[numpy.newaxis, :].T##transpuesta
     casaHacinada = label_encoder.fit_transform(muestrasT[6])[numpy.newaxis, :].T##transpuesta
     alfabeta = label_encoder.fit_transform(muestrasT[7])[numpy.newaxis, :].T##transpuesta
-    ##No se tomo en cuenta promedio de escolaridad
+    escolaridad = (muestrasT[8])[numpy.newaxis, :].T##transpuesta
     asistEducacion = label_encoder.fit_transform(muestrasT[9])[numpy.newaxis, :].T##transpuesta
     trabajo = label_encoder.fit_transform(muestrasT[10])[numpy.newaxis, :].T##transpuesta
     asegurado = label_encoder.fit_transform(muestrasT[11])[numpy.newaxis, :].T##transpuesta
     extranjero = label_encoder.fit_transform(muestrasT[12])[numpy.newaxis, :].T##transpuesta
     discapacitado = label_encoder.fit_transform(muestrasT[13])[numpy.newaxis, :].T##transpuesta
-    jefeHogar = label_encoder.fit_transform(muestrasT[14])
-    #no se toma en cuenta poblacion total, superficie, densidad, viviendas ocupadas, promedio de ocupantes por vivienda
+    jefeHogar = label_encoder.fit_transform(muestrasT[14])#no es transpuesta porque hay que volver a transformarla para hacerla binaria
+    poblacion = pd.qcut(stringToFloat(muestrasT[15]), 10, labels=False)[numpy.newaxis, :].T##transpuesta
+    superficie = pd.qcut(stringToFloat(muestrasT[16]), 4, labels=False)[numpy.newaxis, :].T##transpuesta
+    densidad = pd.qcut(stringToFloat(muestrasT[17]), 4, labels=False)[numpy.newaxis, :].T##transpuesta
+    vOcupadas = pd.qcut(stringToFloat(muestrasT[18]), 4, labels=False)[numpy.newaxis, :].T##transpuesta
+    ocupantes = (muestrasT[19])[numpy.newaxis, :].T##transpuesta
+
     voto = label_encoder.fit_transform(muestrasT[20])[numpy.newaxis, :].T##transpuesta
     
     #convertirlo en listas binarias
@@ -499,45 +489,20 @@ def sustituir():
     cantones = onehot_encoder.fit_transform(cantones)
     jefeHogar = jefeHogar.reshape(len(jefeHogar), 1)
     jefeHogar = onehot_encoder.fit_transform(jefeHogar)
-    #voto = voto.reshape(len(voto), 1)
-    #voto = onehot_encoder.fit_transform(voto)
-    #print(onehot_encoded)
-    salida = numpy.concatenate((cantones,genero, edad, zona, dependiente, casaEstado, casaHacinada, alfabeta, asistEducacion, trabajo, asegurado, extranjero, discapacitado, jefeHogar, voto),axis=1)
-    print(salida)
-    print(len(salida[0]))
-    """
-    print(cantones)
-    print(genero)
-    print(len(edad))
-    print(len(zona))
-    print(len(dependiente))
-    print(len(casaEstado))
-    print(len(casaHacinada))
-    print(len(alfabeta))
-    print(len(asistEducacion))
-    print(len(trabajo))
-    print(len(asegurado))
-    print(len(extranjero))
-    print(len(discapacitado))
-    print(len(jefeHogar))
-    print(len(voto))
-    """
-    """
-    for filas in range(len(muestras)):
-    	salida.append([])
-    	for i in range(len(muestras[filas]),1):
-    		if (muestras[filas][i] in datosCambiantes):
-    			salida[filas].append(datosCambiantes[muestras[filas][i]])
-    		else:
-    			if (isinstance (muestras[filas][i], str)):
-    				salida[filas].append(muestras[filas][i].replace(',',''))
-    			else:
-    				salida[filas].append(muestras[filas][i])
-    """
-    createCSV("refactorizado.csv",muestras)
+    salida = numpy.concatenate((cantones,genero, edad, zona, dependiente, casaEstado, casaHacinada, alfabeta, escolaridad, 
+                                asistEducacion, trabajo, asegurado, extranjero, discapacitado, jefeHogar, poblacion, superficie, 
+                                densidad, vOcupadas, ocupantes,  voto),axis=1)
+
+    
+    #createCSV("refactorizado.csv",muestras)
     return salida
 
+def stringToFloat(lista):
+    for i in range(len(lista)):
+        lista[i] = lista[i].replace(",","")
+    return lista.astype(float)
 
-sustituir()
-#prueba(500, 5,8,'softmax')
+
+#sustituir()
+prueba(500, 5,8,'softmax')
 

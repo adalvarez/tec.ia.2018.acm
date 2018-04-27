@@ -1,0 +1,4 @@
+tec.egg-info/PKG-INFO
+tec.egg-info/SOURCES.txt
+tec.egg-info/dependency_links.txt
+tec.egg-info/top_level.txt
