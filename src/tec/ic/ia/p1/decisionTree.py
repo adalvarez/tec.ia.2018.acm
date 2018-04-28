@@ -251,6 +251,7 @@ def pruneTree(tree, threshold):
                 return None
 
 def builDecisionTreeFile(filename, target):
+    
     file = open(filename)
     data = [[]]
     for line in file:
@@ -262,10 +263,3 @@ def builDecisionTreeFile(filename, target):
     #Recibe una lista de listas, los atributos, y el atributo que vamos a querer predecir
     return crearArbol(data, attributes, target)
 
-# def main():
-#     #De aqui para atras tenemos q reemplazarlo con el codigo de nuestro generador
-#     tree = builDecisionTreeFile('datasets/ejemploLibro.csv', 'Y')
-#     print(tree)
-
-# if __name__ == '__main__':
-#     main()
