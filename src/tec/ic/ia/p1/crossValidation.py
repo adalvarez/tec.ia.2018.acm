@@ -21,7 +21,8 @@ def get_results(training_set, validation_set, options, tipo_modelo):
   if options.rl == True:
     print("Realizando regresion logistica")
   elif options.rn == True:
-    print("Realizando redes neuronales") 
+    print("Realizando redes neuronales")
+    ##no hice esta parte porque hay que cambiar cosas desde atras y no queria cambiarle su codigo y luego cagar algo 
   elif options.a == True:
     print("Realizando arbol de decision")
     
