@@ -197,9 +197,11 @@ def decisionTreeEvaluator(tree, input, target):
     tempTree = tree.copy()
     return decisionTreeEvaluatorAux(tempTree, input, target)
 
+#Al parecer adrian espera q le llegue un diccionario pero le esta llegando una lista
 def decisionTreePredictAux(tree, input):
     keyAtt = list(tree.keys())[0]
     subTree = tree[keyAtt]
+    
     inputValue = input[keyAtt]
     
     if(inputValue not in subTree):

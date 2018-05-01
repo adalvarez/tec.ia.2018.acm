@@ -68,6 +68,8 @@ parser.add_option("", "--provincia", dest="prov", default="",
 parser.add_option("", "--poblacion", dest="poblacion", default=0,
                   help="Poblacion")
 
+parser.add_option("", "--kernel", dest="kernel", default="",
+                  help="Kernel")
 
 parser.add_option("", "--kfold",
                   action="store_true", dest="kf", default=False,
@@ -108,16 +110,18 @@ if options.rl or options.rn or options.knn or options.svm:
   #Se adaptan los datos
   datos1r, datos2r, datos2r1r = dataModifier.data_rn_rl_svm(datos)
   
-elif options.a:
-  datos1r, datos2r, datos2r1r = dataModifier.data_dt(datos)
   print("Datos1r")
   print(datos1r)
-  print("------------------------------------------------------------------")
+  print("------------------")
   print("Datos2r")
   print(datos2r)
-  print("------------------------------------------------------------------")
+  print("------------------")
   print("Datos2r1r")
-  print(datos2r1r)      
+  print(datos2r1r)
+  
+elif options.a:
+  datos1r, datos2r, datos2r1r = dataModifier.data_dt(datos)
+      
 
 
 #Verificamos el tipo de CV solicitado y ejecutamos el CV correspondiente,
@@ -138,12 +142,22 @@ if options.kf == True:
 else: #Se hace holdout por defecto
       test_percentage = int(options.porcentaje_pruebas)
       #Se aplica cv para predecir 1r
-      crossValidation.hold_out_cross_validation(test_percentage, datos1r, options, "1r")
+      print("Ronda 1")
+      error_t, error_v = crossValidation.hold_out_cross_validation(test_percentage, datos1r, options, "1r")
+      print("ErrorT",error_t)
+      print("ErrorV", error_v)
       #Se aplica cv para predecir 2r
-      crossValidation.hold_out_cross_validation(test_percentage, datos2r, options, "2r")
+      print("----------------------------------")
+      print("Ronda 2")
+      error_t, error_v = crossValidation.hold_out_cross_validation(test_percentage, datos2r, options, "2r")
+      print("ErrorT",error_t)
+      print("ErrorV", error_v)
       #Se aplica cv para predecir 2r1r
-      crossValidation.hold_out_cross_validation(test_percentage, datos2r1r, options, "2r1r")
-
+      print("----------------------------------")
+      print("Ronda 2r1r")
+      error_t, error_v =crossValidation.hold_out_cross_validation(test_percentage, datos2r1r, options, "2r1r")
+      print("ErrorT",error_t)
+      print("ErrorV", error_v)
 
 #Cuando ya se tengan los resultados de cada CV, se genera el informe.
 
