@@ -57,19 +57,24 @@ def data_rn_rl_svm(muestras):
     salida = numpy.concatenate((cantones,genero, edad, zona, dependiente, casaEstado, casaHacinada, alfabeta, escolaridad, 
                                 asistEducacion, trabajo, asegurado, extranjero, discapacitado, jefeHogar, poblacion, superficie, 
                                 densidad, vOcupadas, ocupantes),axis=1)
-    salida = salida.astype("float")
-    salida2 = numpy.concatenate((salida, voto1), axis = 1) #datos con primera ronda
-    salida3 = numpy.concatenate((salida, voto2), axis = 1) #datos con segunda ronda
+    salida = salida.astype("float").tolist()
+    salida2 = agregarY(salida, voto1.tolist()) #datos con primera ronda
+    salida3 = agregarY(salida, voto2.tolist()) #datos con segunda ronda
     #binarizar porque ahora va a ser parte de X
     voto1Binarizado = voto1[:]
     voto1Binarizado = label_encoder.fit_transform(voto1Binarizado)
     voto1Binarizado = voto1Binarizado.reshape(len(voto1Binarizado), 1)
     voto1Binarizado = onehot_encoder.fit_transform(voto1Binarizado)
-    salida4 = numpy.concatenate((salida, voto1Binarizado, voto2), axis = 1) #datos mas primera ronda como X, mas segunda ronda como Y
+    salida4 = numpy.concatenate((salida, voto1Binarizado), axis = 1).astype("float")#datos mas primera ronda como X, mas segunda ronda como Y
+    salida4 = agregarY(salida4, voto2.tolist())
+    print(salida2)
+    return salida2, salida3, salida4
 
-    return salida2.tolist(), salida3.tolist(), salida4.tolist()
+def agregarY(lista, y):
+    for i in range(len(lista)):
+        lista[i].append(y[i])
 
-
+    return lista
 def data_dt(muestras):
     salida = []
     muestrasT = numpy.transpose(muestras)
