@@ -16,6 +16,7 @@ import csv
 
 
 def redes_neuronales(XEntranamiento, YEntrenamiento, XEvaluacion, YEvaluacion, capas, unidadCapas, activacion):
+	
 	# create model
 	model = Sequential()
 	model.add(Dense(unidadCapas, input_dim=len(XEntranamiento[0]), activation=activacion))
@@ -140,6 +141,7 @@ def createCSV(filename, data):
 def main():
 	datos = g01.generar_muestra_pais(10000)
 	r1,r2,r3 = data_rn_rl_svm(datos)
+	
 	X,Y = separarXY(r1)
 	X = numpy.asarray(X)
 	Y = numpy.asarray(Y)
@@ -163,4 +165,4 @@ def main():
 
 	createCSV("prueba.csv", archivo)
 
-main()
+#main()

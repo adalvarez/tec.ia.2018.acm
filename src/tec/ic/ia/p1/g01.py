@@ -5,6 +5,11 @@ from optparse import OptionParser
 from tec.ic.ia.pc1 import g01
 import crossValidation
 import dataModifier
+import numpy
+from sklearn.preprocessing import LabelEncoder
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.utils import to_categorical
 
 '''
 def main():
@@ -13,6 +18,15 @@ def main():
       datos = monstruorizarDatos(datos)
       redes_neuronales(datos[:40000],datos[40000:], 5,8,'softmax')
 '''
+def separarXY(datos):
+  #X = datos
+  Y = []
+  for i in datos:
+    Y.append(i[-1])
+    #numpy.delete(i, -1)
+    del i[-1]
+
+  return numpy.asarray(datos),numpy.asarray(Y)
 
 
 parser = OptionParser()
@@ -106,9 +120,43 @@ else:
 #datos2r1r tendra los datos para el modelo que predice 2R_1R
 
 #Se les da a los datos el formato necesario dependiendo del tipo de modelo solicitado
-if options.rl or options.rn or options.knn or options.svm:
+if options.knn or options.svm:
   #Se adaptan los datos
   datos1r, datos2r, datos2r1r = dataModifier.data_rn_rl_svm(datos)
+
+elif options.rl or options.rn:
+  datos1r, datos2r, datos2r1r = dataModifier.data_rn_rl_svm(datos)
+
+  if options.rn:
+
+    #Prepara los datos para 1R para redes neuronales
+    X1,Y1 = separarXY(datos1r)
+    X1R = numpy.asarray(X1)
+    Y1 = numpy.asarray(Y1)
+    label_encoder1 = LabelEncoder()
+    Y1 = label_encoder1.fit_transform(Y1)
+    voto1R = to_categorical(Y1)
+    
+    #Prepara los datos para 2R para redes neuronales
+    X2,Y2 = separarXY(datos2r)
+    X2R = numpy.asarray(X2)
+    Y2 = numpy.asarray(Y2)
+    label_encoder2 = LabelEncoder()
+    Y2 = label_encoder2.fit_transform(Y2)
+    voto2R = to_categorical(Y2)
+
+    #Prepara los datos para 2R1R para redes neuronales 
+    X3,Y3 = separarXY(datos2r1r)
+    X2R1R = numpy.asarray(X3)
+    Y3 = numpy.asarray(Y3)
+    label_encoder3 = LabelEncoder()
+    Y3 = label_encoder3.fit_transform(Y3)
+    voto2R1R = to_categorical(Y3)
+
+  else:
+    pass
+
+
   '''
   print("Datos1r")
   print(datos1r)
@@ -157,23 +205,65 @@ if options.kf == True:
 
 else: #Se hace holdout por defecto
       test_percentage = int(options.porcentaje_pruebas)
-      #Se aplica cv para predecir 1r
-      print("Ronda 1")
-      error_t, error_v = crossValidation.hold_out_cross_validation(test_percentage, datos1r, options, "1r")
-      print("ErrorT",error_t)
-      print("ErrorV", error_v)
-      #Se aplica cv para predecir 2r
-      print("----------------------------------")
-      print("Ronda 2")
-      error_t, error_v = crossValidation.hold_out_cross_validation(test_percentage, datos2r, options, "2r")
-      print("ErrorT",error_t)
-      print("ErrorV", error_v)
-      #Se aplica cv para predecir 2r1r
-      print("----------------------------------")
-      print("Ronda 2r1r")
-      error_t, error_v =crossValidation.hold_out_cross_validation(test_percentage, datos2r1r, options, "2r1r")
-      print("ErrorT",error_t)
-      print("ErrorV", error_v)
+      if options.rn:
+        #Realiza el modelo de 1r
+        respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X1R.tolist(), voto1R.tolist(), options)
+        print("Ronda 1")
+        print("AccTraining", accuracy_training)
+        print("AccValidation", accuracy_validation)
+        print("Respuestas")
+        print(respuestas)
+        respuestaCategorica = label_encoder1.inverse_transform(respuestas)
+        
+        print("RespuestasCategorica")
+        print(respuestaCategorica)
+        print("----------------------------------")
+        
+
+        #Realiza el modelo de 2r
+       
+        respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X2R.tolist(), voto2R.tolist(), options)
+        print("Ronda 2")
+        print("AccTraining", accuracy_training)
+        print("AccValidation", accuracy_validation)
+        print("Respuestas")
+        print(respuestas)
+        respuestaCategorica = label_encoder2.inverse_transform(respuestas)
+        
+        print("RespuestasCategorica")
+        print(respuestaCategorica)
+        print("----------------------------------")
+        #Realiza el modelo de 2r1r
+       
+        respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X2R1R.tolist(), voto2R1R.tolist(), options)
+        print("Ronda 3")
+        print("AccTraining", accuracy_training)
+        print("AccValidation", accuracy_validation)
+        print("Respuestas")
+        print(respuestas)
+        respuestaCategorica = label_encoder3.inverse_transform(respuestas)
+        
+        print("RespuestasCategorica")
+        print(respuestaCategorica)
+
+      else:
+        #Se aplica cv para predecir 1r
+        print("Ronda 1")
+        error_t, error_v = crossValidation.hold_out_cross_validation(test_percentage, datos1r, options, "1r")
+        print("ErrorT",error_t)
+        print("ErrorV", error_v)
+        #Se aplica cv para predecir 2r
+        print("----------------------------------")
+        print("Ronda 2")
+        error_t, error_v = crossValidation.hold_out_cross_validation(test_percentage, datos2r, options, "2r")
+        print("ErrorT",error_t)
+        print("ErrorV", error_v)
+        #Se aplica cv para predecir 2r1r
+        print("----------------------------------")
+        print("Ronda 2r1r")
+        error_t, error_v =crossValidation.hold_out_cross_validation(test_percentage, datos2r1r, options, "2r1r")
+        print("ErrorT",error_t)
+        print("ErrorV", error_v)
 
 #Cuando ya se tengan los resultados de cada CV, se genera el informe.
 

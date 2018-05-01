@@ -3,6 +3,8 @@ import svm
 import numpy
 import kd_trees
 import copy
+import redes_neuronales
+
 
 def get_error_rate(results, real_results):
   print("Resultados")
@@ -42,7 +44,8 @@ def get_results(training_set, validation_set, options, tipo_modelo):
     print("Realizando regresion logistica")
   elif options.rn == True:
     print("Realizando redes neuronales")
-    ##no hice esta parte porque hay que cambiar cosas desde atras y no queria cambiarle su codigo y luego cagar algo 
+    ##no hice esta parte porque hay que cambiar cosas desde atras y no queria cambiarle su codigo y luego cagar algo
+  
   elif options.a == True:
     print("Realizando arbol de decision")
     
@@ -202,7 +205,30 @@ def partition_h(examples, test_percentage):
   #Todo lo que sobra va para el training
   training_set += examples[chunk_size:len(examples)]
 
-  return training_set, validation_set 
+  return training_set, validation_set
+
+
+#Retorna el training y validation set para un hold out cv
+def partition_h_rn(examples, respuestas, test_percentage):
+  
+  chunk_size = (len(examples) * test_percentage) // 100
+  #Primera parte del training_set
+  validation_set_x = []
+  training_set_x = []
+
+  validation_set_y = []
+  training_set_y = []
+  
+  #Validation set
+  validation_set_x += examples[0:chunk_size]
+  validation_set_y += respuestas[0:chunk_size]
+
+  #Todo lo que sobra va para el training
+  training_set_x += examples[chunk_size:len(examples)]
+  training_set_y += respuestas[chunk_size:len(respuestas)]
+
+
+  return training_set_x, training_set_y, validation_set_x, validation_set_y 
 
 #Recibe un tipo de learner, retorna el error promedio usando el training set, y el error promedio usando el validation
 def k_fold_cross_validation(validation_k, test_percentage, examples, options, tipo_modelo):
@@ -280,6 +306,13 @@ def hold_out_cross_validation(test_percentage, examples, options, tipo_modelo):
     error_t = (get_error_rate(result_training, get_real_results(training_set_original) ) / len(training_set)) * 100
     error_v = (get_error_rate(result_validation, get_real_results(validation_set_original) ) / len(validation_set)) * 100
   return error_t, error_v
+
+def hold_out_cross_validation_rn(test_percentage, examples, respuestas, options):
+  training_set_x, training_set_y, validation_set_x, validation_set_y = partition_h_rn(examples, respuestas, test_percentage)
+  respuestas, accuracy_training, accuracy_validation = redes_neuronales.redes_neuronales(numpy.asarray(training_set_x),numpy.asarray(training_set_y),numpy.asarray(validation_set_x) ,numpy.asarray(validation_set_y), int(options.nc), int(options.uc),options.fa)
+  return respuestas, accuracy_training, accuracy_validation
+  
+  
 
 
 
