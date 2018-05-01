@@ -59,8 +59,8 @@ def data_rn_rl_svm(muestras):
                                 densidad, vOcupadas, ocupantes),axis=1)
     salida = salida.astype("float")
     salidaCopy = numpy.copy(salida)
-    salida2 = agregarY(salidaCopy, voto1.tolist()) #datos con primera ronda
-    salida3 = agregarY(salida, voto2.tolist()) #datos con segunda ronda
+    salida2 = agregarY(salidaCopy, voto1.T) #datos con primera ronda
+    salida3 = agregarY(salida, voto2.T) #datos con segunda ronda
     #binarizar porque ahora va a ser parte de X
     voto1Binarizado = voto1[:]
     voto1Binarizado = label_encoder.fit_transform(voto1Binarizado)
@@ -70,16 +70,19 @@ def data_rn_rl_svm(muestras):
     salida = numpy.array(salida , dtype="float")
     salida4 = numpy.concatenate((salida, voto1Binarizado), axis = 1)#datos mas primera ronda como X, mas segunda ronda como Y
     salida4 = salida4.astype("float")
-    salida4 = agregarY(salida4, voto2.tolist())
+    salida4 = agregarY(salida4, voto2.T)
     return salida2, salida3, salida4
+
+
 
 def agregarY(lista, y):
     lista = lista.tolist()
+    y = y[0].tolist()
     for i in range(len(lista)):
         lista[i].append(y[i])
 
     return lista
-    
+
 def data_dt(muestras):
     salida = []
     muestrasT = numpy.transpose(muestras)
