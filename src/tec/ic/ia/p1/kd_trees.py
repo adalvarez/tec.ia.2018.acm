@@ -1,7 +1,12 @@
 from operator import itemgetter
 import math
+import operator
+
+
 
 def construir_kd_tree(puntos, profundidad, cantidad_dimensiones):
+  global puntos_cercanos
+  puntos_cercanos = []
   cantidad_puntos = len(puntos)
   
   #Si no hay puntos, no se hace ningun kdtree
@@ -43,7 +48,8 @@ def calcular_distancia(punto1, punto2):
 
 #Retorna cual punto entre punto1 y punto2 esta mas cerca al punto_entrada
 def distancia_mas_cercana(punto_entrada,punto1, punto2):
-  
+  #print("punto1", punto1)
+  #print("punto2", punto1)
   if punto1 is None:
     distancia2 = calcular_distancia(punto_entrada, punto2['punto'])
     punto2['distancia'] = distancia2
@@ -101,9 +107,11 @@ def insertar_punto(punto, k):
 
 
 
-
-def kd_tree_punto_mas_cercano(raiz, punto, profundidad, cantidad_dimensiones):
-  
+#Recibe una raiz para empezar a recorrer, el punto al que le vamos a encontrar los vecinos cercanos
+#Un contador para saber la profundidad actual, la cantidad de dimensiones de cada ejemplo
+#El k representa la cantidad de vecinos q estamos buscando
+def kd_tree_punto_mas_cercano(raiz, punto, profundidad, cantidad_dimensiones,k):
+  global puntos_cercanos
   if raiz is None:
     
     return None
@@ -123,22 +131,45 @@ def kd_tree_punto_mas_cercano(raiz, punto, profundidad, cantidad_dimensiones):
     rama_siguiente = raiz['right']
     rama_opuesta = raiz['left']
 
-  punto_cercano = distancia_mas_cercana(punto, kd_tree_punto_mas_cercano(rama_siguiente, punto, profundidad + 1, cantidad_dimensiones), raiz)
+  punto_cercano = distancia_mas_cercana(punto, kd_tree_punto_mas_cercano(rama_siguiente, punto, profundidad + 1, cantidad_dimensiones, k), raiz)
   
-  insertar_punto(raiz, 1)
+  insertar_punto(raiz, k)
   #Verificamos si hay un punto aun mas cercano al encontrado, en la rama opuesta.
   #Esto puede darse si la distancia entre del mejor actual es mayor, que la distancia entre el punto de entrada, y el punto de ramificacion
   if calcular_distancia(punto, punto_cercano['punto']) > abs(punto[dimension] - raiz['punto'][dimension]):
-        punto_cercano = distancia_mas_cercana(punto, kd_tree_punto_mas_cercano(rama_opuesta, punto,profundidad + 1, cantidad_dimensiones), punto_cercano)
-        insertar_punto(raiz, 1)
+        punto_cercano = distancia_mas_cercana(punto, kd_tree_punto_mas_cercano(rama_opuesta, punto,profundidad + 1, cantidad_dimensiones, k), punto_cercano)
+        insertar_punto(raiz, k)
   return punto_cercano
 
+def kd_tree_punto_mas_cercano_aux(raiz, punto, profundidad, cantidad_dimensiones,k):
+  global puntos_cercanos
+  punto_cercano = kd_tree_punto_mas_cercano(raiz, punto , profundidad, cantidad_dimensiones,k)
+  return punto_cercano, puntos_cercanos
 
+def kd_predict(raiz, punto, profundidad, cantidad_dimensiones,k):
+  punto_cercano, puntos_cercanos = kd_tree_punto_mas_cercano_aux(raiz, punto, profundidad, cantidad_dimensiones,k)
+  #print("Punto:", punto)
+  #print("Puntos cercanos")
+  #print(puntos_cercanos)
+  #print("Punto mas cercano")
+  #print(punto_cercano)
+  frecuencias = {}
+  for punto in puntos_cercanos:
+    if (punto['clase'] in frecuencias):
+      frecuencias[punto['clase']] += 1.0 
+    else:
+      frecuencias[punto['clase']] = 1.0
+  #print("Frecuencias")
+  #print(frecuencias)
+  return max(frecuencias.items(), key=operator.itemgetter(1))[0]
+
+
+'''
 kd_tree = construir_kd_tree([[1,3,"PAC",1],[1,8,"RN",2],[2,2,"PLN",3],[2,10,"PUSC",4],[3,6,"FA",5],[4,1,"ML",6],[5,4,"PNG",7], [6,8,"PNG",8], [7,4,"PNG",9], [7,7,"PNG",10], [8,2,"PNG",11], [8,5,"PNG",12], [9,9,"PNG",13]], 0, 2)
 #kd_tree = construir_kd_tree([[40,70,"PAC"]],0,2)
 punto = [4,8]
 puntos_cercanos = []
-punto_cercano = kd_tree_punto_mas_cercano(kd_tree, punto , 0, 2)
+punto_cercano, my_puntos_cercanos = kd_tree_punto_mas_cercano_aux(kd_tree, punto , 0, 2,5)
 
 #print(calcular_distancia([2,6], [4,8]))
 print("----------------------------------------------------------------")
@@ -149,7 +180,7 @@ print("NEAREST")
 print(punto_cercano)
 print("----------------------------------------------------------------")
 print("MULTIPLE NEAREST")
-print(puntos_cercanos)
+print(my_puntos_cercanos)
 print("----------------------------------------------------------------")
 print("DISTANCIAS")
 print("[1,3]",calcular_distancia([1,3], [4,8]))
@@ -165,5 +196,5 @@ print("[7,7]",calcular_distancia([7,7], [4,8]))
 print("[8,2]",calcular_distancia([8,2], [4,8]))
 print("[8,5]",calcular_distancia([8,5], [4,8]))
 print("[9,9]",calcular_distancia([9,9], [4,8]))
-
+'''
 

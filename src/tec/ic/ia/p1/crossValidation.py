@@ -1,6 +1,7 @@
 import decisionTree
 import svm
 import numpy
+import kd_trees
 
 def get_error_rate(results, real_results):
   print("Resultados")
@@ -44,8 +45,6 @@ def get_results(training_set, validation_set, options, tipo_modelo):
   elif options.a == True:
     print("Realizando arbol de decision")
     
-    
-
     #Obtenemos los atributos y el target, q van a variar dependiendo del tipo de corrida
     attributes = ["CANTON", "GENERO","EDAD","ZONA","DEPENDIENTE","CASA_ESTADO","CASA_HACINADA","ALFABETA", "ESCOLARIDAD", "EDUACION", "TRABAJADO", "ASEGURADO","EXTRANJERO", "DISCAPACITADO", "JEFE_HOGAR", "POBLACION","SUPERFICIE","DENSIDAD","V_OCUPADAS","OCUPANTES","VOTO1", "VOTO2"]
     if tipo_modelo == "1r":
@@ -78,6 +77,28 @@ def get_results(training_set, validation_set, options, tipo_modelo):
 
   elif options.knn == True:
     print("Realizando k nearest neighbors")
+    #Se agrega un identificador unico a cada ejemplo
+    for i in range(len(training_set)):
+      training_set[i].append(i)
+
+    kd_tree = kd_trees.construir_kd_tree(training_set,0,len(training_set[0]) - 2) #Se le resta 2, ya que el target y el identificador no deben ser tomados como dimensiones
+    print("Termine de hacer el arbol")
+    i = 1
+    for example in training_set:
+      print(i)
+      i+=1
+      del example[-1]
+      del example[-1]
+      newResult = kd_trees.kd_predict(kd_tree, example, 0, len(example), int(options.k))
+      result_training.append(newResult)
+
+    #Realizamos las predicciones con el validation set
+    for example in validation_set:
+      del example[-1]
+      newResult = kd_trees.kd_predict(kd_tree, example, 0, len(example), int(options.k))
+      result_validation.append(newResult)
+
+
   elif options.svm == True:
     print("Realizando SVM")
 
@@ -208,8 +229,7 @@ def hold_out_cross_validation(test_percentage, examples, options, tipo_modelo):
 
   #Si no, tengo q calcularlo a pata
   else:
-    
-    
+        
     error_t = (get_error_rate(result_training, get_real_results(training_set_original) ) / len(training_set)) * 100
     error_v = (get_error_rate(result_validation, get_real_results(validation_set_original) ) / len(validation_set)) * 100
   return error_t, error_v
