@@ -109,7 +109,7 @@ else:
 if options.rl or options.rn or options.knn or options.svm:
   #Se adaptan los datos
   datos1r, datos2r, datos2r1r = dataModifier.data_rn_rl_svm(datos)
-  
+  '''
   print("Datos1r")
   print(datos1r)
   print("------------------")
@@ -118,7 +118,7 @@ if options.rl or options.rn or options.knn or options.svm:
   print("------------------")
   print("Datos2r1r")
   print(datos2r1r)
-  
+  '''
 elif options.a:
   datos1r, datos2r, datos2r1r = dataModifier.data_dt(datos)
       

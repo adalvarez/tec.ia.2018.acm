@@ -55,8 +55,12 @@ def get_results(training_set, validation_set, options, tipo_modelo):
 
     #Generamos el arbol
     tree = decisionTree.crearArbol(training_set, attributes, target)
-
+    print("Arbol PrePoda")
+    print(tree)
     #Realizamos la poda
+    decisionTree.pruneTree(tree, float(options.up))
+    print("Arbol Postpoda")
+    print(tree)
 
     #Realizamos las predicciones con el training set
     for example in training_set:
@@ -82,11 +86,25 @@ def get_results(training_set, validation_set, options, tipo_modelo):
       training_set[i].append(i)
 
     kd_tree = kd_trees.construir_kd_tree(training_set,0,len(training_set[0]) - 2) #Se le resta 2, ya que el target y el identificador no deben ser tomados como dimensiones
-    print("Termine de hacer el arbol")
-    i = 1
+    
+    '''
+    example = training_set[0]
+    print("Este es el ejemplo q voy a testear")
+    print(example)
+    del example[-1]
+    del example[-1]
+    print("Asi queda despues de los deletes")
+    print(example)
+    newResult = kd_trees.kd_predict(kd_tree, example, 0, len(example), int(options.k))
+    print("Esta fue la prediccion")
+    print(newResult)
+    '''
+    
+    
     for example in training_set:
-      print(i)
-      i+=1
+      #print("Ejemplo mandado")
+      #print(example)
+
       del example[-1]
       del example[-1]
       newResult = kd_trees.kd_predict(kd_tree, example, 0, len(example), int(options.k))
@@ -94,9 +112,12 @@ def get_results(training_set, validation_set, options, tipo_modelo):
 
     #Realizamos las predicciones con el validation set
     for example in validation_set:
+      #print("Ejemplo mandado")
+      #print(example)
       del example[-1]
       newResult = kd_trees.kd_predict(kd_tree, example, 0, len(example), int(options.k))
       result_validation.append(newResult)
+    
 
 
   elif options.svm == True:

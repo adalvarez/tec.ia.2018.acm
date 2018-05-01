@@ -147,10 +147,17 @@ def kd_tree_punto_mas_cercano_aux(raiz, punto, profundidad, cantidad_dimensiones
   return punto_cercano, puntos_cercanos
 
 def kd_predict(raiz, punto, profundidad, cantidad_dimensiones,k):
+  global puntos_cercanos
+  puntos_cercanos = []
+  #print("Ejemplo recibido")
+  #print(punto)
   punto_cercano, puntos_cercanos = kd_tree_punto_mas_cercano_aux(raiz, punto, profundidad, cantidad_dimensiones,k)
   #print("Punto:", punto)
   #print("Puntos cercanos")
   #print(puntos_cercanos)
+  #print("------------------------------------------")
+  #for punto in puntos_cercanos:
+    #print(punto['id'],punto['distancia'])
   #print("Punto mas cercano")
   #print(punto_cercano)
   frecuencias = {}
