@@ -4,6 +4,7 @@ import numpy
 import kd_trees
 import copy
 import redes_neuronales
+import regresionLogistica
 
 
 def get_error_rate(results, real_results):
@@ -307,9 +308,12 @@ def hold_out_cross_validation(test_percentage, examples, options, tipo_modelo):
     error_v = (get_error_rate(result_validation, get_real_results(validation_set_original) ) / len(validation_set)) * 100
   return error_t, error_v
 
-def hold_out_cross_validation_rn(test_percentage, examples, respuestas, options):
+def hold_out_cross_validation_rn(test_percentage, examples, respuestas, options, unique_labels):
   training_set_x, training_set_y, validation_set_x, validation_set_y = partition_h_rn(examples, respuestas, test_percentage)
-  respuestas, accuracy_training, accuracy_validation = redes_neuronales.redes_neuronales(numpy.asarray(training_set_x),numpy.asarray(training_set_y),numpy.asarray(validation_set_x) ,numpy.asarray(validation_set_y), int(options.nc), int(options.uc),options.fa)
+  if options.rl:
+    accuracy_training, accuracy_validation, respuestas, _ = regresionLogistica.lr_train_test(training_set_x, training_set_y, validation_set_x, validation_set_y, unique_labels, float(options.l1), float(options.l2))
+  else:
+    respuestas, accuracy_training, accuracy_validation = redes_neuronales.redes_neuronales(numpy.asarray(training_set_x),numpy.asarray(training_set_y),numpy.asarray(validation_set_x) ,numpy.asarray(validation_set_y), int(options.nc), int(options.uc),options.fa)
   return respuestas, accuracy_training, accuracy_validation
   
   

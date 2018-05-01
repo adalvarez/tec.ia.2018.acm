@@ -127,34 +127,52 @@ if options.knn or options.svm:
 elif options.rl or options.rn:
   datos1r, datos2r, datos2r1r = dataModifier.data_rn_rl_svm(datos)
 
-  if options.rn:
+  #Prepara los datos para 1R para redes neuronales
+  X1,Y1 = separarXY(datos1r)
+  X1R = numpy.asarray(X1)
+  #print("Este es x1r")
+  #print(X1R)
+  #print("Este es x1r0")
+  #print(X1R[0])
+  Y1 = numpy.asarray(Y1)
+  #print("Este es Y1r")
+  #print(Y1)
+  #print("Este es Y1r0")
+  #print(Y1[0])
+  label_encoder1 = LabelEncoder()
+  Y1 = label_encoder1.fit_transform(Y1)
+  
+  
+  #Prepara los datos para 2R para redes neuronales
+  X2,Y2 = separarXY(datos2r)
+  X2R = numpy.asarray(X2)
+  Y2 = numpy.asarray(Y2)
+  label_encoder2 = LabelEncoder()
+  Y2 = label_encoder2.fit_transform(Y2)
+  
 
-    #Prepara los datos para 1R para redes neuronales
-    X1,Y1 = separarXY(datos1r)
-    X1R = numpy.asarray(X1)
-    Y1 = numpy.asarray(Y1)
-    label_encoder1 = LabelEncoder()
-    Y1 = label_encoder1.fit_transform(Y1)
-    voto1R = to_categorical(Y1)
-    
-    #Prepara los datos para 2R para redes neuronales
-    X2,Y2 = separarXY(datos2r)
-    X2R = numpy.asarray(X2)
-    Y2 = numpy.asarray(Y2)
-    label_encoder2 = LabelEncoder()
-    Y2 = label_encoder2.fit_transform(Y2)
-    voto2R = to_categorical(Y2)
+  #Prepara los datos para 2R1R para redes neuronales 
+  X3,Y3 = separarXY(datos2r1r)
+  X2R1R = numpy.asarray(X3)
+  Y3 = numpy.asarray(Y3)
+  label_encoder3 = LabelEncoder()
+  Y3 = label_encoder3.fit_transform(Y3)
 
-    #Prepara los datos para 2R1R para redes neuronales 
-    X3,Y3 = separarXY(datos2r1r)
-    X2R1R = numpy.asarray(X3)
-    Y3 = numpy.asarray(Y3)
-    label_encoder3 = LabelEncoder()
-    Y3 = label_encoder3.fit_transform(Y3)
-    voto2R1R = to_categorical(Y3)
+  r1_unique_labels = None
+  r2_unique_labels = None
+  r3_unique_labels = None
+  
 
-  else:
-    pass
+  if options.rl:
+    r1_unique_labels = to_categorical(list(set(Y1)))
+    r2_unique_labels = to_categorical(list(set(Y2)))
+    r3_unique_labels = to_categorical(list(set(Y3)))
+
+  voto1R = to_categorical(Y1)
+  voto2R = to_categorical(Y2)
+  voto2R1R = to_categorical(Y3)
+
+
 
 
   '''
@@ -205,9 +223,10 @@ if options.kf == True:
 
 else: #Se hace holdout por defecto
       test_percentage = int(options.porcentaje_pruebas)
-      if options.rn:
+      if options.rn or options.rl:
+
         #Realiza el modelo de 1r
-        respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X1R.tolist(), voto1R.tolist(), options)
+        respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X1R.tolist(), voto1R.tolist(), options, r1_unique_labels)
         print("Ronda 1")
         print("AccTraining", accuracy_training)
         print("AccValidation", accuracy_validation)
@@ -222,7 +241,7 @@ else: #Se hace holdout por defecto
 
         #Realiza el modelo de 2r
        
-        respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X2R.tolist(), voto2R.tolist(), options)
+        respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X2R.tolist(), voto2R.tolist(), options, r2_unique_labels)
         print("Ronda 2")
         print("AccTraining", accuracy_training)
         print("AccValidation", accuracy_validation)
@@ -235,7 +254,7 @@ else: #Se hace holdout por defecto
         print("----------------------------------")
         #Realiza el modelo de 2r1r
        
-        respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X2R1R.tolist(), voto2R1R.tolist(), options)
+        respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X2R1R.tolist(), voto2R1R.tolist(), options, r3_unique_labels)
         print("Ronda 3")
         print("AccTraining", accuracy_training)
         print("AccValidation", accuracy_validation)
