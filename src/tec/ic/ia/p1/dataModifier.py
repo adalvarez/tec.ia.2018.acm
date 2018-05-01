@@ -74,10 +74,12 @@ def data_rn_rl_svm(muestras):
     return salida2, salida3, salida4
 
 def agregarY(lista, y):
+    lista = lista.tolist()
     for i in range(len(lista)):
         lista[i].append(y[i])
 
     return lista
+    
 def data_dt(muestras):
     salida = []
     muestrasT = numpy.transpose(muestras)
