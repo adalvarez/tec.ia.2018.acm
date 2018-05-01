@@ -131,13 +131,29 @@ elif options.a:
 if options.kf == True:
       test_percentage = int(options.porcentaje_pruebas)
       validation_k = int(options.kfolds)
-      #Se aplica cv para predecir 1r
-      crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos1r, options, "1r")
-      #Se aplica cv para predecir 2r
-      crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos2r, options, "2r")
-      #Se aplica cv para predecir 2r1r
-      crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos2r1r, options, "2r1r")
 
+      
+      #Se aplica cv para predecir 1r
+      fold_error_t, fold_error_v, final_error_t, final_error_v = crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos1r, options, "1r")
+      print("Ronda 1")
+      print("FoldErrorT", fold_error_t)
+      print("FoldErrorV", fold_error_v)
+      print("FinalErrorT",final_error_t)
+      print("FinalErrorV", final_error_v)
+      #Se aplica cv para predecir 2r
+      fold_error_t, fold_error_v, final_error_t, final_error_v = crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos2r, options, "2r")
+      print("Ronda 2")
+      print("FoldErrorT", fold_error_t)
+      print("FoldErrorV", fold_error_v)
+      print("FinalErrorT",final_error_t)
+      print("FinalErrorV", final_error_v)
+      #Se aplica cv para predecir 2r1r
+      fold_error_t, fold_error_v, final_error_t, final_error_v = crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos2r1r, options, "2r1r")
+      print("Ronda 3")
+      print("FoldErrorT", fold_error_t)
+      print("FoldErrorV", fold_error_v)
+      print("FinalErrorT",final_error_t)
+      print("FinalErrorV", final_error_v)
 
 else: #Se hace holdout por defecto
       test_percentage = int(options.porcentaje_pruebas)

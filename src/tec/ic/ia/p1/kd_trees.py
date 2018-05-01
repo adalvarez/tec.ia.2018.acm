@@ -34,7 +34,10 @@ def construir_kd_tree(puntos, profundidad, cantidad_dimensiones):
 
 #Calcula la distancia euclidiana entre 2 puntos
 def calcular_distancia(punto1, punto2):
-    
+    #print("Punto1", len(punto1))
+    #print(punto1)
+    #print("Punto2", len(punto2))
+    #print(punto2)
     distance = 0
     for i in range(len(punto1)):
       di = punto1[i] - punto2[i]
