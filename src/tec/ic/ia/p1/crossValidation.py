@@ -1,7 +1,12 @@
 import decisionTree
+import svm
+import numpy
 
 def get_error_rate(results, real_results):
-  
+  print("Resultados")
+  print(results)
+  #print("Resultados reales")
+  #print(real_results)
   errors = 0
   for indice_resultado in range(len(results)):
     if results[indice_resultado] != real_results[indice_resultado]:
@@ -11,12 +16,25 @@ def get_error_rate(results, real_results):
 
 #Recibe un set de entrenamiento y retorna una lista con las respuestas esperadas por cada ejemplo
 def get_real_results(matrix):
-  return [row[len(row)-1] for row in matrix]  
+  return [row[len(row)-1] for row in matrix]
+
+def separarXY(datos):
+      #X = datos
+      #Y = []
+      for i in datos:
+        #Y.append(i[-1])
+        #numpy.delete(i, -1)
+        del i[-1]
+
+      return datos
 
 
 #Recibe un training set y un validation set. Busca el tipo de learner que se va a usar en options, asi como otros parametros necesarios
 #f
 def get_results(training_set, validation_set, options, tipo_modelo):
+
+  result_training = []
+  result_validation = []
 
   if options.rl == True:
     print("Realizando regresion logistica")
@@ -26,8 +44,7 @@ def get_results(training_set, validation_set, options, tipo_modelo):
   elif options.a == True:
     print("Realizando arbol de decision")
     
-    result_training = []
-    result_validation = []
+    
 
     #Obtenemos los atributos y el target, q van a variar dependiendo del tipo de corrida
     attributes = ["CANTON", "GENERO","EDAD","ZONA","DEPENDIENTE","CASA_ESTADO","CASA_HACINADA","ALFABETA", "ESCOLARIDAD", "EDUACION", "TRABAJADO", "ASEGURADO","EXTRANJERO", "DISCAPACITADO", "JEFE_HOGAR", "POBLACION","SUPERFICIE","DENSIDAD","V_OCUPADAS","OCUPANTES","VOTO1", "VOTO2"]
@@ -44,18 +61,52 @@ def get_results(training_set, validation_set, options, tipo_modelo):
 
     #Realizamos las predicciones con el training set
     for example in training_set:
-      newResult = decisionTree.decisionTreePredict(tree, example)
+      example_dic = {}
+      for i in range(len(example)):
+        example_dic[attributes[i]] = example[i]
+
+      newResult = decisionTree.decisionTreePredict(tree, example_dic)
       result_training.append(newResult)
 
     #Realizamos las predicciones con el validation set
     for example in validation_set:
-      newResult = decisionTree.decisionTreePredict(tree, example)
+      example_dic = {}
+      for i in range(len(example)):
+        example_dic[attributes[i]] = example[i]
+      newResult = decisionTree.decisionTreePredict(tree, example_dic)
       result_validation.append(newResult)
 
   elif options.knn == True:
     print("Realizando k nearest neighbors")
   elif options.svm == True:
-    print("Realizando SVM") 
+    print("Realizando SVM")
+
+    #Obtenemos las respuestas del training set
+    #print("Training set antes de separarle el y")
+    #print(training_set)
+    respuestas = get_real_results(training_set)
+    #print("Estas son las respuestas")
+    #print(respuestas)
+    training_set = separarXY(training_set)
+    #print("Con este training set voy a entrenar svm")
+    #print(training_set)
+    
+    
+    if tipo_modelo == "1r":
+      modelo = svm.generate_svm_model(training_set, respuestas, 'ovo', options.kernel)
+    else:
+      modelo = svm.generate_svm_model(training_set, respuestas, 'ovr', options.kernel)
+    
+    for example in training_set:
+
+      newResult = svm.svm_predict(example, modelo)
+      result_training.append(newResult)
+
+    #Realizamos las predicciones con el validation set
+    for example in validation_set:
+      del example[-1]
+      newResult = svm.svm_predict(example, modelo)
+      result_validation.append(newResult)
 
   return result_training, result_validation
 
@@ -102,8 +153,7 @@ def k_fold_cross_validation(validation_k, test_percentage, examples, options, ti
   validation_k_original = validation_k
 
   k_fold_examples, test_set = partition_h(examples, test_percentage) #Dejamos un 70% para fold, y un 30% para test set
-  print("k_fold_examples", len(k_fold_examples))
-  print("test_set", len(test_set))
+  
 
   if len(k_fold_examples) % validation_k != 0:
     validation_k +=1
@@ -111,8 +161,7 @@ def k_fold_cross_validation(validation_k, test_percentage, examples, options, ti
   for i in range(validation_k):
 
     training_set, validation_set = partition_k(k_fold_examples, i, validation_k_original)
-    print(i,"trainingset",len(training_set))
-    print(i,"validationset",len(validation_set))
+   
     '''
     result_training, result_validation = get_results(training_set, validation_set, options, tipo_modelo)
 
@@ -145,18 +194,24 @@ def k_fold_cross_validation(validation_k, test_percentage, examples, options, ti
 
 def hold_out_cross_validation(test_percentage, examples, options, tipo_modelo):
   training_set, validation_set = partition_h(examples, test_percentage)
-  print("Len Trainin Set", len(training_set))
-  print("Len Validation Set", len(validation_set))
+  training_set_original = numpy.copy(training_set)
+  validation_set_original = numpy.copy(validation_set)
+  
+  
   result_training, result_validation = get_results(training_set, validation_set, options, tipo_modelo)
   #Si lo aplicado fue rl o rn entonces ya en result training y result validation tengo el error rate
   if options.rl or options.rn:
     error_t = result_training
     error_v = result_validation
 
+  
+
   #Si no, tengo q calcularlo a pata
   else:
-    error_t = (get_error_rate(result_training, get_real_results(training_set) ) / len(training_set)) * 100
-    error_v = (get_error_rate(result_validation, get_real_results(validation_set) ) / len(validation_set)) * 100
+    
+    
+    error_t = (get_error_rate(result_training, get_real_results(training_set_original) ) / len(training_set)) * 100
+    error_v = (get_error_rate(result_validation, get_real_results(validation_set_original) ) / len(validation_set)) * 100
   return error_t, error_v
 
 
