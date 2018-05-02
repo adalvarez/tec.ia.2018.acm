@@ -37,10 +37,10 @@ def data_rn_rl_svm(muestras):
     extranjero = label_encoder.fit_transform(muestrasT[12])[numpy.newaxis, :].T##transpuesta
     discapacitado = label_encoder.fit_transform(muestrasT[13])[numpy.newaxis, :].T##transpuesta
     jefeHogar = label_encoder.fit_transform(muestrasT[14])#no es transpuesta porque hay que volver a transformarla para hacerla binaria
-    poblacion = pd.qcut(stringToFloat(muestrasT[15]), 5, labels=False)[numpy.newaxis, :].T##transpuesta
-    superficie = pd.qcut(stringToFloat(muestrasT[16]), 4, labels=False)[numpy.newaxis, :].T##transpuesta
-    densidad = pd.qcut(stringToFloat(muestrasT[17]), 4, labels=False)[numpy.newaxis, :].T##transpuesta
-    vOcupadas = pd.qcut(stringToFloat(muestrasT[18]), 4, labels=False)[numpy.newaxis, :].T##transpuesta
+    poblacion = pd.qcut(stringToFloat(muestrasT[15]), 5, labels=False, duplicates='drop')[numpy.newaxis, :].T##transpuesta
+    superficie = pd.qcut(stringToFloat(muestrasT[16]), 4, labels=False, duplicates='drop')[numpy.newaxis, :].T##transpuesta
+    densidad = pd.qcut(stringToFloat(muestrasT[17]), 4, labels=False, duplicates='drop')[numpy.newaxis, :].T##transpuesta
+    vOcupadas = pd.qcut(stringToFloat(muestrasT[18]), 4, labels=False, duplicates='drop')[numpy.newaxis, :].T##transpuesta
     ocupantes = (muestrasT[19])[numpy.newaxis, :].T##transpuesta
 
     #voto = label_encoder.fit_transform(muestrasT[20])[numpy.newaxis, :].T##transpuesta
@@ -92,24 +92,24 @@ def data_dt(muestras):
     cantones = (muestrasT[0])[numpy.newaxis, :].T#queda categorica
     genero = (muestrasT[1])[numpy.newaxis, :].T##dejar categorica
     #normalizar edad
-    edad = numpy.asarray(pd.cut(stringToFloat(muestrasT[2]), 6, labels=["Nino", "Adolecente", "Joven", "Adulto Joven", "Adulto", "Adulto Mayor"])) [numpy.newaxis, :].T ##categotiza valor continuo
+    edad = numpy.asarray(pd.cut(stringToFloat(muestrasT[2]), 6, labels=["Nino", "Adolecente", "Joven", "Adulto Joven", "Adulto", "Adulto Mayor"], duplicates='drop')) [numpy.newaxis, :].T ##categotiza valor continuo
     zona = (muestrasT[3])[numpy.newaxis, :].T##queda categorizado
     dependiente = (muestrasT[4])[numpy.newaxis, :].T##queda categorizado
     casaEstado = (muestrasT[5])[numpy.newaxis, :].T##queda categorizado
     casaHacinada = (muestrasT[6])[numpy.newaxis, :].T##queda categorizado
     alfabeta = (muestrasT[7])[numpy.newaxis, :].T##queda categorizado
-    escolaridad = numpy.asarray(pd.qcut(stringToFloat(muestrasT[8]), 5, labels=["Muy Baja","Baja", "Media", "Alta", "Muy Alta"]))[numpy.newaxis, :].T#(muestrasT[8])[numpy.newaxis, :].T##transpuesta
+    escolaridad = numpy.asarray(pd.qcut(stringToFloat(muestrasT[8]), 5, labels=["Muy Baja","Baja", "Media", "Alta", "Muy Alta"], duplicates='drop'))[numpy.newaxis, :].T#(muestrasT[8])[numpy.newaxis, :].T##transpuesta
     asistEducacion = (muestrasT[9])[numpy.newaxis, :].T##queda categorizado
     trabajo = (muestrasT[10])[numpy.newaxis, :].T##queda categorizado
     asegurado = (muestrasT[11])[numpy.newaxis, :].T##queda categorizado
     extranjero = (muestrasT[12])[numpy.newaxis, :].T##queda categorizado
     discapacitado = (muestrasT[13])[numpy.newaxis, :].T##queda categorizado
     jefeHogar = (muestrasT[14])[numpy.newaxis, :].T#queda categorizada
-    poblacion = numpy.asarray(pd.qcut(stringToFloat(muestrasT[15]), 4, labels=["Muy poco poblado", "Poco poblado", "Medianamente poblado", "Altamente Poblado"]))[numpy.newaxis, :].T##transpuesta
-    superficie = numpy.asarray(pd.qcut(stringToFloat(muestrasT[16]), 5, labels=["Muy pequena","Pequena","Mediana", "Grande", "Muy Grande"]))[numpy.newaxis, :].T##transpuesta
-    densidad = numpy.asarray(pd.qcut(stringToFloat(muestrasT[17]),4, labels=["Muy poco denso", "Poco denso", "Medianamente denso", "Muy denso"]))[numpy.newaxis, :].T##transpuesta
-    vOcupadas = numpy.asarray(pd.qcut(stringToFloat(muestrasT[18]), 4, labels=["Muy pocas","Pocas","Regular","Muchas"]))[numpy.newaxis, :].T##transpuesta
-    ocupantes = numpy.asarray(pd.qcut(stringToFloat(muestrasT[19]), 3, labels=["Bajo el promedio","promedio","Sobre el promedio"]))[numpy.newaxis, :].T##transpuesta
+    poblacion = numpy.asarray(pd.qcut(stringToFloat(muestrasT[15]), 4, labels=["Muy poco poblado", "Poco poblado", "Medianamente poblado", "Altamente Poblado"], duplicates='drop'))[numpy.newaxis, :].T##transpuesta
+    superficie = numpy.asarray(pd.qcut(stringToFloat(muestrasT[16]), 5, labels=["Muy pequena","Pequena","Mediana", "Grande", "Muy Grande"], duplicates='drop'))[numpy.newaxis, :].T##transpuesta
+    densidad = numpy.asarray(pd.qcut(stringToFloat(muestrasT[17]),4, labels=["Muy poco denso", "Poco denso", "Medianamente denso", "Muy denso"], duplicates='drop'))[numpy.newaxis, :].T##transpuesta
+    vOcupadas = numpy.asarray(pd.qcut(stringToFloat(muestrasT[18]), 4, labels=["Muy pocas","Pocas","Regular","Muchas"], duplicates='drop'))[numpy.newaxis, :].T##transpuesta
+    ocupantes = numpy.asarray(pd.qcut(stringToFloat(muestrasT[19]), 3, labels=["Bajo el promedio","promedio","Sobre el promedio"], duplicates='drop'))[numpy.newaxis, :].T##transpuesta
 
     #voto = label_encoder.fit_transform(muestrasT[20])[numpy.newaxis, :].T##transpuesta
     voto1 = (muestrasT[20])[numpy.newaxis, :].T##transpuesta
