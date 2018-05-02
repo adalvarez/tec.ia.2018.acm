@@ -8,10 +8,7 @@ import regresionLogistica
 
 
 def get_error_rate(results, real_results):
-  print("Resultados")
-  print(results)
-  #print("Resultados reales")
-  #print(real_results)
+ 
   errors = 0
   for indice_resultado in range(len(results)):
     if results[indice_resultado] != real_results[indice_resultado]:
@@ -86,51 +83,29 @@ def get_results(training_set, validation_set, options, tipo_modelo):
     print("Realizando k nearest neighbors")
     
     training_set_copia = copy.deepcopy(training_set)
-    #print("Asi era trainingset")
-    #print(training_set) 
+    
     #Se agrega un identificador unico a cada ejemplo
     for i in range(len(training_set_copia)):
       training_set_copia[i].append(i)
-    #print("Asi quedo trainingset")
-    #print(training_set)
-    #print("Asi quedo trainingsetcopia")
-    #print(training_set_copia)
+    
     kd_tree = kd_trees.construir_kd_tree(training_set_copia,0,len(training_set_copia[0]) - 2) #Se le resta 2, ya que el target y el identificador no deben ser tomados como dimensiones
     
-    '''
-    example = training_set[0]
-    print("Este es el ejemplo q voy a testear")
-    print(example)
-    del example[-1]
-    del example[-1]
-    print("Asi queda despues de los deletes")
-    print(example)
-    newResult = kd_trees.kd_predict(kd_tree, example, 0, len(example), int(options.k))
-    print("Esta fue la prediccion")
-    print(newResult)
-    '''
+   
     
-    print("Training")
+    
     for example in training_set:
-      #print("Ejemplo mandado")
-      #print(example)
-      #print("Asi era example")
-      #print(example)
+      
       example_copia = example[:]
       del example_copia[-1]
       
-      #print("Asi quedo example")
-      #print(example)
-      #print("asi quedo example copia")
-      #print(example_copia)
+      
 
       newResult = kd_trees.kd_predict(kd_tree, example_copia, 0, len(example), int(options.k))
       result_training.append(newResult)
-    print("Validation")
+    
     #Realizamos las predicciones con el validation set
     for example in validation_set:
-      #print("Ejemplo mandado")
-      #print(example)
+      
       example_copia = example[:]
       del example_copia[-1]
       
@@ -143,14 +118,11 @@ def get_results(training_set, validation_set, options, tipo_modelo):
     print("Realizando SVM")
 
     #Obtenemos las respuestas del training set
-    #print("Training set antes de separarle el y")
-    #print(training_set)
+    
     respuestas = get_real_results(training_set)
-    #print("Estas son las respuestas")
-    #print(respuestas)
+    
     training_set_x = separarXY(copy.deepcopy(training_set))
-    #print("Con este training set voy a entrenar svm")
-    #print(training_set)
+    
     
     
     if tipo_modelo == "1r":
@@ -239,20 +211,18 @@ def k_fold_cross_validation(validation_k, test_percentage, examples, options, ti
 
   k_fold_examples, test_set = partition_h(examples, test_percentage) #Dejamos un 70% para fold, y un 30% para test set
   
-  print("k_fold_examples", len(k_fold_examples))
-  print("test_set", len(test_set))
+  
 
   k_fold_examples_original = numpy.copy(k_fold_examples)
   test_set_original = numpy.copy(test_set)
 
   if len(k_fold_examples) % validation_k != 0:
     validation_k +=1
-  print("Estoy haciendo FOLDS")
+  
   for i in range(validation_k):
-    print("Fold", i)
+    
     training_set, validation_set = partition_k(k_fold_examples, i, validation_k_original)
-    print("TrainingSet", len(training_set))
-    print("ValidationSet", len(validation_set))
+    
     training_set_original = numpy.copy(training_set)
     validation_set_original = numpy.copy(validation_set)
    
@@ -272,8 +242,9 @@ def k_fold_cross_validation(validation_k, test_percentage, examples, options, ti
     
   #Prueba final con test set
   #Si lo aplicado fue rl o rn entonces ya en result training y result validation tengo el error rate
-  print("Estoy probando test set")
+  
   result_training, result_validation = get_results(k_fold_examples, test_set, options, tipo_modelo)
+  respuestas_obtenidas = result_validation + result_training
   if options.rl or options.rn:
     final_error_t = result_training
     final_error_v = result_validation
@@ -284,7 +255,7 @@ def k_fold_cross_validation(validation_k, test_percentage, examples, options, ti
     final_error_v = (get_error_rate(result_validation, get_real_results(test_set_original) ) / len(test_set_original)) * 100
     
 
-  return (fold_error_t/len(k_fold_examples))*100, (fold_error_v/len(k_fold_examples))*100, final_error_t, final_error_v
+  return respuestas_obtenidas,(fold_error_t/len(k_fold_examples))*100, (fold_error_v/len(k_fold_examples))*100, final_error_t, final_error_v
 
 
 def hold_out_cross_validation(test_percentage, examples, options, tipo_modelo):
@@ -294,6 +265,7 @@ def hold_out_cross_validation(test_percentage, examples, options, tipo_modelo):
   
   
   result_training, result_validation = get_results(training_set, validation_set, options, tipo_modelo)
+  respuestas_obtenidas = result_validation + result_training
   #Si lo aplicado fue rl o rn entonces ya en result training y result validation tengo el error rate
   if options.rl or options.rn:
     error_t = result_training
@@ -306,13 +278,15 @@ def hold_out_cross_validation(test_percentage, examples, options, tipo_modelo):
         
     error_t = (get_error_rate(result_training, get_real_results(training_set_original) ) / len(training_set)) * 100
     error_v = (get_error_rate(result_validation, get_real_results(validation_set_original) ) / len(validation_set)) * 100
-  return error_t, error_v
+  return respuestas_obtenidas, error_t, error_v
 
 def hold_out_cross_validation_rn(test_percentage, examples, respuestas, options, unique_labels):
   training_set_x, training_set_y, validation_set_x, validation_set_y = partition_h_rn(examples, respuestas, test_percentage)
   if options.rl:
+    print("Realizando regresion lineal")
     accuracy_training, accuracy_validation, respuestas, _ = regresionLogistica.lr_train_test(training_set_x, training_set_y, validation_set_x, validation_set_y, unique_labels, float(options.l1), float(options.l2))
   else:
+    print("Realizando redes neuronales")
     respuestas, accuracy_training, accuracy_validation = redes_neuronales.redes_neuronales(numpy.asarray(training_set_x),numpy.asarray(training_set_y),numpy.asarray(validation_set_x) ,numpy.asarray(validation_set_y), int(options.nc), int(options.uc),options.fa)
   return respuestas, accuracy_training, accuracy_validation
   

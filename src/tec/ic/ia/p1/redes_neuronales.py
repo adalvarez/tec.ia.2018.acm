@@ -28,12 +28,12 @@ def redes_neuronales(XEntranamiento, YEntrenamiento, XEvaluacion, YEvaluacion, c
 	# Compile model
 	model.compile(loss='categorical_crossentropy', optimizer='adamax', metrics=['accuracy'])#categorical_crossentropy
 	# Fit the model
-	model.fit(XEntranamiento, YEntrenamiento, epochs = 50, batch_size=10)#, verbose=0)
+	model.fit(XEntranamiento, YEntrenamiento, epochs = 50, batch_size=10, verbose=0)
 	# evaluate the model
 	scores = model.evaluate(XEntranamiento, YEntrenamiento)
 	scores2 = model.evaluate(XEvaluacion, YEvaluacion)
 	#print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-	predecir = numpy.concatenate((XEntranamiento,XEvaluacion), axis=0)
+	predecir = numpy.concatenate((XEvaluacion,XEntranamiento), axis=0)
 	ynew = model.predict_classes(predecir)
 	predicciones = []
 	# show the inputs and predicted outputs
@@ -43,7 +43,7 @@ def redes_neuronales(XEntranamiento, YEntrenamiento, XEvaluacion, YEvaluacion, c
 		#print("Predicted=%s" % (ynew[i]))
 		predicciones.append(ynew[i])
 
-	return numpy.asarray(predicciones), scores[1], scores2[1]
+	return numpy.asarray(predicciones), scores[1]*100, scores2[1]*100
 
 def separarXY(datos):
       #X = datos

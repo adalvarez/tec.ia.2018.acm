@@ -34,10 +34,7 @@ def construir_kd_tree(puntos, profundidad, cantidad_dimensiones):
 
 #Calcula la distancia euclidiana entre 2 puntos
 def calcular_distancia(punto1, punto2):
-    #print("Punto1", len(punto1))
-    #print(punto1)
-    #print("Punto2", len(punto2))
-    #print(punto2)
+    
     distance = 0
     for i in range(len(punto1)):
       di = punto1[i] - punto2[i]
@@ -51,8 +48,7 @@ def calcular_distancia(punto1, punto2):
 
 #Retorna cual punto entre punto1 y punto2 esta mas cerca al punto_entrada
 def distancia_mas_cercana(punto_entrada,punto1, punto2):
-  #print("punto1", punto1)
-  #print("punto2", punto1)
+  
   if punto1 is None:
     distancia2 = calcular_distancia(punto_entrada, punto2['punto'])
     punto2['distancia'] = distancia2
@@ -152,59 +148,18 @@ def kd_tree_punto_mas_cercano_aux(raiz, punto, profundidad, cantidad_dimensiones
 def kd_predict(raiz, punto, profundidad, cantidad_dimensiones,k):
   global puntos_cercanos
   puntos_cercanos = []
-  #print("Ejemplo recibido")
-  #print(punto)
+  
   punto_cercano, puntos_cercanos = kd_tree_punto_mas_cercano_aux(raiz, punto, profundidad, cantidad_dimensiones,k)
-  #print("Punto:", punto)
-  #print("Puntos cercanos")
-  #print(puntos_cercanos)
-  #print("------------------------------------------")
-  #for punto in puntos_cercanos:
-    #print(punto['id'],punto['distancia'])
-  #print("Punto mas cercano")
-  #print(punto_cercano)
+  
   frecuencias = {}
   for punto in puntos_cercanos:
     if (punto['clase'] in frecuencias):
       frecuencias[punto['clase']] += 1.0 
     else:
       frecuencias[punto['clase']] = 1.0
-  #print("Frecuencias")
-  #print(frecuencias)
+  
   return max(frecuencias.items(), key=operator.itemgetter(1))[0]
 
 
-'''
-kd_tree = construir_kd_tree([[1,3,"PAC",1],[1,8,"RN",2],[2,2,"PLN",3],[2,10,"PUSC",4],[3,6,"FA",5],[4,1,"ML",6],[5,4,"PNG",7], [6,8,"PNG",8], [7,4,"PNG",9], [7,7,"PNG",10], [8,2,"PNG",11], [8,5,"PNG",12], [9,9,"PNG",13]], 0, 2)
-#kd_tree = construir_kd_tree([[40,70,"PAC"]],0,2)
-punto = [4,8]
-puntos_cercanos = []
-punto_cercano, my_puntos_cercanos = kd_tree_punto_mas_cercano_aux(kd_tree, punto , 0, 2,5)
 
-#print(calcular_distancia([2,6], [4,8]))
-print("----------------------------------------------------------------")
-print("KDREE")
-print(kd_tree)
-print("----------------------------------------------------------------")
-print("NEAREST")
-print(punto_cercano)
-print("----------------------------------------------------------------")
-print("MULTIPLE NEAREST")
-print(my_puntos_cercanos)
-print("----------------------------------------------------------------")
-print("DISTANCIAS")
-print("[1,3]",calcular_distancia([1,3], [4,8]))
-print("[1,8]",calcular_distancia([1,8], [4,8]))
-print("[2,2]",calcular_distancia([2,2], [4,8]))
-print("[2,10]",calcular_distancia([2,10], [4,8]))
-print("[3,6]",calcular_distancia([3,6], [4,8]))
-print("[4,1]",calcular_distancia([4,1], [4,8]))
-print("[5,4]",calcular_distancia([5,4], [4,8]))
-print("[6,8]",calcular_distancia([6,8], [4,8]))
-print("[7,4]",calcular_distancia([7,4], [4,8]))
-print("[7,7]",calcular_distancia([7,7], [4,8]))
-print("[8,2]",calcular_distancia([8,2], [4,8]))
-print("[8,5]",calcular_distancia([8,5], [4,8]))
-print("[9,9]",calcular_distancia([9,9], [4,8]))
-'''
 

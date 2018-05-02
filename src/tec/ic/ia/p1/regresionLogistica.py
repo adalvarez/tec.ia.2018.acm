@@ -127,7 +127,7 @@ def lr_train_test(trn_X, trn_Y, tst_X, tst_Y, labels_Y, l1, l2):
 						if(bit==1):
 							tst_prd.append(index)
 
-		prd = numpy.concatenate((trn_prd, tst_prd), axis=0)
+		prd = numpy.concatenate((tst_prd,trn_prd), axis=0)
 
 		return train_acc, test_acc, prd, duration
 

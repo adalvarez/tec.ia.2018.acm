@@ -11,13 +11,7 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import to_categorical
 
-'''
-def main():
-      print("en redes")
-      datos = g01.generar_muestra_pais(50000)
-      datos = monstruorizarDatos(datos)
-      redes_neuronales(datos[:40000],datos[40000:], 5,8,'softmax')
-'''
+
 def separarXY(datos):
   #X = datos
   Y = []
@@ -130,15 +124,7 @@ elif options.rl or options.rn:
   #Prepara los datos para 1R para redes neuronales
   X1,Y1 = separarXY(datos1r)
   X1R = numpy.asarray(X1)
-  #print("Este es x1r")
-  #print(X1R)
-  #print("Este es x1r0")
-  #print(X1R[0])
   Y1 = numpy.asarray(Y1)
-  #print("Este es Y1r")
-  #print(Y1)
-  #print("Este es Y1r0")
-  #print(Y1[0])
   label_encoder1 = LabelEncoder()
   Y1 = label_encoder1.fit_transform(Y1)
   
@@ -175,19 +161,46 @@ elif options.rl or options.rn:
 
 
 
-  '''
-  print("Datos1r")
-  print(datos1r)
-  print("------------------")
-  print("Datos2r")
-  print(datos2r)
-  print("------------------")
-  print("Datos2r1r")
-  print(datos2r1r)
-  '''
+ 
 elif options.a:
   datos1r, datos2r, datos2r1r = dataModifier.data_dt(datos)
-      
+
+
+headers = ["Canton",
+                "Genero",
+                "Edad",
+                "Zona(Urbana/Rural)",
+                "Dependiente",
+                "Casa en buen estado",
+                "Casa Hacinada",
+                "Alfabeta",
+                "Promedio de escolaridad",
+                "Asistencia a eduacion regular",
+                "En la fuerza de trabajo",
+                "Asegurado",
+                "Poblacion nacida en el extranjero",
+                "Discapacitado",
+                "Jefe de hogar",
+                "Poblacion Total(Canton)",
+                "Superficie(Canton)",
+                "Densidad(Canton)",
+                "Viviendas ocupadas(Canton)",
+                "Promedio de ocupantes por vivienda(Canton)",
+                "Voto1R",
+                "Voto2R",
+                "Usado en entrenamiento",
+                "Prediccion1R",
+                "Prediccion2R",
+                "Prediccion2R1R"]
+
+es_entrenamiento = []
+test_percentage = int(options.porcentaje_pruebas)
+chunk_size = (len(datos) * test_percentage) // 100
+es_entrenamiento += ['NO'] * chunk_size
+es_entrenamiento += ['SI'] * (len(datos) - chunk_size)
+es_entrenamiento = numpy.asarray(es_entrenamiento)
+
+archivo = numpy.concatenate((datos,es_entrenamiento[numpy.newaxis, :].T), axis=1)
 
 
 #Verificamos el tipo de CV solicitado y ejecutamos el CV correspondiente,
@@ -195,95 +208,118 @@ elif options.a:
 
 #Se hace kfold
 if options.kf == True:
-      test_percentage = int(options.porcentaje_pruebas)
+      
       validation_k = int(options.kfolds)
 
       
       #Se aplica cv para predecir 1r
-      fold_error_t, fold_error_v, final_error_t, final_error_v = crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos1r, options, "1r")
+      respuestas, fold_error_t, fold_error_v, final_error_t, final_error_v = crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos1r, options, "1r")
       print("Ronda 1")
-      print("FoldErrorT", fold_error_t)
-      print("FoldErrorV", fold_error_v)
-      print("FinalErrorT",final_error_t)
-      print("FinalErrorV", final_error_v)
+      print("FoldAccuracyT", 100 - fold_error_t)
+      print("FoldAccuracyV", 100 -fold_error_v)
+      print("FinalAccuracyT",100 - final_error_t)
+      print("FinalAccuracyV",100 - final_error_v)
+      print("--------------------------------------")
+      respuestas = numpy.asarray(respuestas)
+
+      archivo = numpy.concatenate((archivo,respuestas[numpy.newaxis, :].T), axis=1)
       #Se aplica cv para predecir 2r
-      fold_error_t, fold_error_v, final_error_t, final_error_v = crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos2r, options, "2r")
+      respuestas, fold_error_t, fold_error_v, final_error_t, final_error_v = crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos2r, options, "2r")
       print("Ronda 2")
-      print("FoldErrorT", fold_error_t)
-      print("FoldErrorV", fold_error_v)
-      print("FinalErrorT",final_error_t)
-      print("FinalErrorV", final_error_v)
+      print("FoldAccuracyT", 100 - fold_error_t)
+      print("FoldAccuracyV", 100 - fold_error_v)
+      print("FinalAccuracyT",100 - final_error_t)
+      print("FinalAccuracyV",100 - final_error_v)
+      print("--------------------------------------")
+      respuestas = numpy.asarray(respuestas)
+
+      archivo = numpy.concatenate((archivo, respuestas[numpy.newaxis, :].T), axis=1)
       #Se aplica cv para predecir 2r1r
-      fold_error_t, fold_error_v, final_error_t, final_error_v = crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos2r1r, options, "2r1r")
+      respuestas, fold_error_t, fold_error_v, final_error_t, final_error_v = crossValidation.k_fold_cross_validation(validation_k, test_percentage, datos2r1r, options, "2r1r")
       print("Ronda 3")
-      print("FoldErrorT", fold_error_t)
-      print("FoldErrorV", fold_error_v)
-      print("FinalErrorT",final_error_t)
-      print("FinalErrorV", final_error_v)
+      print("FoldAccuracyT", 100 - fold_error_t)
+      print("FoldAccuracyV", 100 -fold_error_v)
+      print("FinalAccuracyT",100 - final_error_t)
+      print("FinalAccuracyV",100 - final_error_v)
+      respuestas = numpy.asarray(respuestas)
+
+      archivo = numpy.concatenate((archivo, respuestas[numpy.newaxis, :].T), axis=1)
 
 else: #Se hace holdout por defecto
-      test_percentage = int(options.porcentaje_pruebas)
+      
       if options.rn or options.rl:
 
         #Realiza el modelo de 1r
         respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X1R.tolist(), voto1R.tolist(), options, r1_unique_labels)
         print("Ronda 1")
-        print("AccTraining", accuracy_training)
-        print("AccValidation", accuracy_validation)
-        print("Respuestas")
-        print(respuestas)
-        respuestaCategorica = label_encoder1.inverse_transform(respuestas)
+        print("AccuracyT", accuracy_training)
+        print("AccuracyV", accuracy_validation)
         
-        print("RespuestasCategorica")
-        print(respuestaCategorica)
-        print("----------------------------------")
+        respuestaCategorica = label_encoder1.inverse_transform(respuestas)
+        archivo = numpy.concatenate((archivo,respuestaCategorica[numpy.newaxis, :].T), axis=1)
+        
+        
+        print("--------------------------------------")
         
 
         #Realiza el modelo de 2r
        
         respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X2R.tolist(), voto2R.tolist(), options, r2_unique_labels)
         print("Ronda 2")
-        print("AccTraining", accuracy_training)
-        print("AccValidation", accuracy_validation)
-        print("Respuestas")
-        print(respuestas)
-        respuestaCategorica = label_encoder2.inverse_transform(respuestas)
+        print("AccuracyT", accuracy_training)
+        print("AccuracyV", accuracy_validation)
         
-        print("RespuestasCategorica")
-        print(respuestaCategorica)
-        print("----------------------------------")
+        
+        respuestaCategorica = label_encoder2.inverse_transform(respuestas)
+        archivo = numpy.concatenate((archivo,respuestaCategorica[numpy.newaxis, :].T), axis=1)
+                
+        print("--------------------------------------")
         #Realiza el modelo de 2r1r
        
         respuestas, accuracy_training, accuracy_validation = crossValidation.hold_out_cross_validation_rn(test_percentage, X2R1R.tolist(), voto2R1R.tolist(), options, r3_unique_labels)
         print("Ronda 3")
-        print("AccTraining", accuracy_training)
-        print("AccValidation", accuracy_validation)
-        print("Respuestas")
-        print(respuestas)
-        respuestaCategorica = label_encoder3.inverse_transform(respuestas)
+        print("AccuracyT", accuracy_training)
+        print("AccuracyV", accuracy_validation)
         
-        print("RespuestasCategorica")
-        print(respuestaCategorica)
+        
+        respuestaCategorica = label_encoder3.inverse_transform(respuestas)
+        archivo = numpy.concatenate((archivo,respuestaCategorica[numpy.newaxis, :].T), axis=1)
+        
+        
 
       else:
         #Se aplica cv para predecir 1r
         print("Ronda 1")
-        error_t, error_v = crossValidation.hold_out_cross_validation(test_percentage, datos1r, options, "1r")
-        print("ErrorT",error_t)
-        print("ErrorV", error_v)
+        respuestas, error_t, error_v = crossValidation.hold_out_cross_validation(test_percentage, datos1r, options, "1r")
+        print("AccuracyT",100 - error_t)
+        print("AccuracyV",100 - error_v)
+        respuestas = numpy.asarray(respuestas)
+        archivo = numpy.concatenate((archivo,respuestas[numpy.newaxis, :].T), axis=1)
         #Se aplica cv para predecir 2r
         print("----------------------------------")
         print("Ronda 2")
-        error_t, error_v = crossValidation.hold_out_cross_validation(test_percentage, datos2r, options, "2r")
-        print("ErrorT",error_t)
-        print("ErrorV", error_v)
+        respuestas, error_t, error_v = crossValidation.hold_out_cross_validation(test_percentage, datos2r, options, "2r")
+        print("AccuracyT",100 - error_t)
+        print("AccuracyV",100 - error_v)
+        respuestas = numpy.asarray(respuestas)
+        archivo = numpy.concatenate((archivo,respuestas[numpy.newaxis, :].T), axis=1)
         #Se aplica cv para predecir 2r1r
         print("----------------------------------")
         print("Ronda 2r1r")
-        error_t, error_v =crossValidation.hold_out_cross_validation(test_percentage, datos2r1r, options, "2r1r")
-        print("ErrorT",error_t)
-        print("ErrorV", error_v)
+        respuestas, error_t, error_v =crossValidation.hold_out_cross_validation(test_percentage, datos2r1r, options, "2r1r")
+        respuestas = numpy.asarray(respuestas)
+        archivo = numpy.concatenate((archivo,respuestas[numpy.newaxis, :].T), axis=1)
+        print("AccuracyT",100 - error_t)
+        print("AccuracyV",100 - error_v)
 
-#Cuando ya se tengan los resultados de cada CV, se genera el informe.
+headers = headers
+archivo = archivo.tolist()
+archivo_final = []
+archivo_final.append(headers) 
+archivo_final+= archivo
+
+nombre_archivo = options.prefijo + ".csv"
+g01.createCSV(nombre_archivo,archivo_final)
+
 
 #GG
