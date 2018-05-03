@@ -107,7 +107,7 @@ def lr_train_test(trn_X, trn_Y, tst_X, tst_Y, labels_Y, l1, l2):
 
 			# Actualizar accuracy para trainnig y test.
 			train_acc = lr_accuracy(predictions, batch_labels)
-			test_acc = lr_accuracy(test_prediction.eval(), numpy.array(tst_Y).astype(numpy.float32))
+		test_acc = lr_accuracy(test_prediction.eval(), numpy.array(tst_Y).astype(numpy.float32))
 
 		duration = time.time() - start_time
 

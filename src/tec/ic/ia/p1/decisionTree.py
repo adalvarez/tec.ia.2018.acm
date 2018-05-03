@@ -100,6 +100,7 @@ def escogerInformacion(data, attributes, target):
             if newGain>maxGain:
                 maxGain = newGain
                 best = attr
+    if(maxGain > 1): maxGain = 1.0
     return best, maxGain
 
 #Retorna una lista con todos los posibles valores de un atributo
