@@ -92,7 +92,7 @@ def data_dt(muestras):
     cantones = (muestrasT[0])[numpy.newaxis, :].T#queda categorica
     genero = (muestrasT[1])[numpy.newaxis, :].T##dejar categorica
     #normalizar edad
-    edad = numpy.asarray(pd.cut(stringToFloat(muestrasT[2]), 6, labels=["Nino", "Adolecente", "Joven", "Adulto Joven", "Adulto", "Adulto Mayor"], duplicates='drop')) [numpy.newaxis, :].T ##categotiza valor continuo
+    edad = numpy.asarray(pd.qcut(stringToFloat(muestrasT[2]), 6, labels=["Nino", "Adolecente", "Joven", "Adulto Joven", "Adulto", "Adulto Mayor"], duplicates='drop')) [numpy.newaxis, :].T ##categotiza valor continuo
     zona = (muestrasT[3])[numpy.newaxis, :].T##queda categorizado
     dependiente = (muestrasT[4])[numpy.newaxis, :].T##queda categorizado
     casaEstado = (muestrasT[5])[numpy.newaxis, :].T##queda categorizado

@@ -230,7 +230,7 @@ def pruneTree(tree, threshold):
     keyAtt = list(tree.keys())[0]
     subTree = tree[keyAtt]
     if(isLeaf(tree) is True):
-        if(subTree['__GI'] < threshold):
+        if(subTree['__GI'] <= threshold):
             # debe ser podado
             return subTree['__PL']
         else:
@@ -246,7 +246,7 @@ def pruneTree(tree, threshold):
                     subTree[key] = prune
                     nSubtreesPruned +=1
         if(nSubtrees == nSubtreesPruned and nSubtrees != 0):
-            if(subTree['__GI'] < threshold):
+            if(subTree['__GI'] <= threshold):
                 # debe ser podado
                 return subTree['__PL']
             else:
