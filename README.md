@@ -1,9 +1,39 @@
-:toc: macro
-:toc-title:
-:toclevels: 99
+<!-- MarkdownTOC -->
 
-# Table of Contents
-toc::[]
+- l Proyecto de Inteligencia Artificial
+				- Autores:
+					- Adrián Álvarez - Marlon Agüero - César Borge
+			- Sobre el proyecto:
+- Marco Teórico
+		- K-Nearest Neighbors utilizando K-d Trees:
+		- Regresión Logística:
+		- Árboles de decisión:
+		- Redes Neuronales:
+		- Support Vector Machines:
+		- Cross-Validation:
+- Análisis de modelos:
+		- Regresión Logística:
+		- Árboles de decisión:
+		- K-Nearest Neighbors utilizando K-d Trees:
+		- Redes Neuronales:
+		- Support Vector Machines:
+				- Linear
+				- Polynomial
+				- RBF
+				- Sigmoid
+	- Conclusión
+- Manual de uso:
+	- Instalación  de los requerimientos:
+			- tec.ic.ia.pc1
+			- SciPy con NumPy
+			- Scikit-learn
+			- Keras
+			- tensorflow
+			- Pandas
+	- Uso del sistema
+
+<!-- /MarkdownTOC -->
+
 # l Proyecto de Inteligencia Artificial
 ##### Autores:
 ###### Adrián Álvarez - Marlon Agüero - César Borge
