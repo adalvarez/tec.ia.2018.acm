@@ -92,17 +92,17 @@ A continuación se presenta un marco teórico que resume la teoría necesaria, c
 ### K-Nearest Neighbors utilizando K-d Trees:
 La idea de **K-Nearest Neighbors** es que dado un ejemplo de entrada, se retornen los `k` ejemplos de entrenamiento con la menor distancia al ejemplo de entrada. El ejemplo de entrada será clasificado con la clase de mayor pluralidad entre los vecinos encontrados. Teniendo en cuenta que cada ejemplo será un vector de `n` dimensiones, la distancia entre cada ejemplo se puede calcular utilizando la fórmula de distancia euclidiana:
 
-![](https://wikimedia.org/api/rest_v1/media/math/render/svg/5d808dc9b184ca40b14c1950be6e48c0a323a583 =250x) 
+![](https://wikimedia.org/api/rest_v1/media/math/render/svg/5d808dc9b184ca40b14c1950be6e48c0a323a583) 
 
 En la siguiente imágen se puede apreciar un espacio de dos dimensiones donde se buscan los 3 y 6 vecinos más cercanos al punto de la estrella:
 
-![](http://adataanalyst.com/wp-content/uploads/2016/07/kNN-1.png =250x) 
+![](http://adataanalyst.com/wp-content/uploads/2016/07/kNN-1.png) 
 
 
 La forma más sencilla de implementar este modelo es guardar cada uno de los ejemplos en una tabla y cuando se tenga un ejemplo de entrada, calcular la distancia con respecto a todos los ejemplos de la tabla y retornar los k ejemplos que tengan una menor distancia. Sin embargo esta solución tiene una complejidad  `O(n)`, por lo tanto cuando tenemos millones de ejemplos, se vuelve muy costosa. Para solucionar esto se utilizan los **K-d Trees**, en los cuales se realizan búsquedas igual que en los árboles binarios, lo cual reduce la complejidad a `O(log2(n))`.
 En la siguiente imagen se visualiza un K-d Tree de 3 dimensiones:
 
-![](https://gopalcdas.files.wordpress.com/2017/05/1.png =550x) 
+![](https://gopalcdas.files.wordpress.com/2017/05/1.png) 
 
 
 
@@ -115,13 +115,13 @@ Antes de entender cómo funciona una regresión logística es importante entende
 
 Un `árbol de decisión` toma como entrada un objeto o una situación descrita a través de un conjunto de atributos y devuelve una decisión: el valor previsto de la salida dada la entrada. Un árbol de decisión desarrolla una secuencia de test para poder alcanzar una decisión. Cada nodo interno del árbol corresponde con un test sobre el valor de una de las propiedades, y las ramas que salen del nodo están etiquetadas con los posibles valores de dicha propiedad. Cada nodo hoja del árbol representa el valor que ha de ser devuelto si dicho nodo hoja es alcanzado. Si el árbol de decisión pretende dar una respuesta binaria (aunque puede ser categórica) el aspecto crucial para la construcción de un árbol de decisión es elegir el atributo que separe en mayor medidas las decisiones. Para ello se utiliza `ganancia de información` para obtener una medida de discriminación para seleccionar el mejor atributo para bajar de nivel en el árbol.
 
-![decisionTree](https://www.tutorialspoint.com/data_mining/images/dm_decision_tree.jpg =350x)
+![decisionTree](https://www.tutorialspoint.com/data_mining/images/dm_decision_tree.jpg)
 
 ### Redes Neuronales:
 Desde los inicios de la Inteligencia Artificial algunos trabajos pretendían crear redes neuronales artificiales. Este modelo busca que cada neurona (nodo o unidad) tenga una función de activación y se interconecte con otras neuronas. Una neurona será activada cuando una combinación lineal en sus entradas exceda un umbral determinado por la función de activación elegida. Entre las funciones de activación se pueden encontrar la Softmax, Sigmoid, Relu. Para poder implementar una red neuronal en Python de manera sencilla y rápida se puede utilizar [Keras](https://keras.io/), que es un API a alto nivel para la creación de redes neuronales, además es el que se utilizó para realizar este proyecto. También puede seguir el siguiente [tutorial](https://machinelearningmastery.com/tutorial-first-neural-network-python-keras/) simple donde se crea una red neuronal sencilla con Keras. 
 Nota: Los datos necesarios para la creación de las redes neuronales son los mismos utilizados por la regresión.
 
-![Red Neuronal](https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/RedNeuronalArtificial.png/400px-RedNeuronalArtificial.png =500x)
+![Red Neuronal](https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/RedNeuronalArtificial.png/400px-RedNeuronalArtificial.png)
 
 ### Support Vector Machines:
 **Support Vector Machines o SVMs** son un conjunto de algoritmos de aprendizaje supervisado. Se puede utilizar para problemas de clasificación (como el de este proyecto).
@@ -130,11 +130,11 @@ Para lograr esto SVM, representa los puntos de muestra (aquellos que se utilizar
 
 En la siguiente imagen se presenta un caso básico de SVM:
 
-![](https://aitrends.com/wp-content/uploads/2018/01/1-19SVM-2.jpg =250x) 
+![](https://aitrends.com/wp-content/uploads/2018/01/1-19SVM-2.jpg) 
 
 La forma más fácil para separar ambos espacios es utilizando una línea recta, sin embargo la mayoría de problemas de clasificación presentan más de dos posibles valores de predicción o de clasificación. Para ello se utilizan las funciones **Kernel** que permiten mapear el espacio en un nuevo espacio de características de mayor dimensionalidad.
 
-![](http://scikit-learn.org/stable/_images/sphx_glr_plot_iris_001.png =550x) 
+![](http://scikit-learn.org/stable/_images/sphx_glr_plot_iris_001.png) 
 
 Para implementar SVM en este proyecto se utilizó [SciKit Learn](https://machinelearningmastery.com/tutorial-first-neural-network-python-keras/).
 
@@ -157,14 +157,14 @@ El siguiente análisis de regresión logística tuvo como objetivo evaluar un co
 1. Incremento igualitario para `l1` y `l2`:
 Esta prueba consiste en utilizar `l1=l2=0.1`, posteriormente `l1=l2=0.3`, `l1=l2=0.5`, `l1=l2=0.7`, `l1=l2=0.9`. Cabe mencionar que esta prueba cuenta con la particularidad que los valores de exactitud (accuracy) son un promedio de 5 ejecuciones realizadas para la misma combinación.
 
-![](https://i.imgur.com/morYKLg.png =450x)
+![](https://i.imgur.com/morYKLg.png)
 
 Podemos observar una constancia de accuracy para el set de test según sea la ronda. Pero es curioso como en general predecir la segunda ronda tienen a ser más acertado que la primera, quizás por el número de clases con las que se trabajan.
 
 2. `l1=0` e incremento de `l2`:
 Esta prueba consiste en utilizar `l1=0` y `l2=0.1`, posteriormente `l2=0.3`, `l2=0.5`, `l2=0.7`, `l2=0.9` con `l1=0`. Cabe mencionar que esta prueba cuenta con la particularidad que los valores de exactitud (accuracy) son un promedio de 3 ejecuciones realizadas para la misma combinación.
 
-![](https://i.imgur.com/jyCQGzh.png =450x)
+![](https://i.imgur.com/jyCQGzh.png)
 
 
 Podemos observar una constancia de accuracy para el set de test según sea la ronda. Pero es curioso como en general predecir la segunda ronda tienen a ser más acertado que la primera, quizás por el número de clases con las que se trabajan.
@@ -172,16 +172,16 @@ Podemos observar una constancia de accuracy para el set de test según sea la ro
 3. `l2=0` e incremento de `l1`:
 Esta prueba consiste en utilizar `l2=0` y `l1=0.1`, posteriormente `l1=0.3`, `l1=0.5`, `l1=0.7`, `l1=0.9` con `l2=0`.Cabe mencionar que esta prueba cuenta con la particularidad que los valores de exactitud (accuracy) son un promedio de 3 ejecuciones realizadas para la misma combinación.
 
-![](https://i.imgur.com/axLBjWc.png =450x)
+![](https://i.imgur.com/axLBjWc.png)
 
 
 Podemos observar una constancia de accuracy para el set de test según sea la ronda. Pero es curioso como en general predecir la segunda ronda tienen a ser más acertado que la primera, quizás por el número de clases con las que se trabajan.
 
 Finalmente parece crucial comparar estas tres pruebas para tomar una decisión sobre qué modificación o combinación de `l1` y `l2` utilizar para maximizar el accuracy. A continuación se muestran los resultados de cada tipo de prueba para `1R`, `2R``2R1R`. 
 
-![](https://i.imgur.com/zFvXj6M.png =450x)
-![](https://i.imgur.com/hJi9nWi.png =450x)
-![](https://i.imgur.com/3pCdqY2.png =450x)
+![](https://i.imgur.com/zFvXj6M.png)
+![](https://i.imgur.com/hJi9nWi.png)
+![](https://i.imgur.com/3pCdqY2.png)
 
 Se puede concluir que aumentar los valores de `l1` y `l2` simultáneamente contribuye para la predicción de la primera ronda, mientras que para las segunda ronda conviene más utilizar `l2=0` y `l1=x` donde `x` puede ser el valor que más se adecue.
 La ejecución de este modelo podría ser como el siguiente:
@@ -191,6 +191,7 @@ La ejecución de este modelo podría ser como el siguiente:
 También cabe mencionar que dadas las pruebas realizadas con las variaciones de `l1` y `l2` se llegó a un máximo de 31% (trainning) y 27% (test) para primera ronda y, 64% (trainning) y 63% (test) segunda ronda. En general para este modelo, el aporte de la votación de la primera ronda para predecir la segunda tiende a ser bajo.
 
 **Máximos generales**:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 31.10%                 |              27.89% |
@@ -248,6 +249,7 @@ Podemos notar que conforme el umbral de poda aumente el accuracy para el entrena
 Se puede apreciar una importante diferencia entre la precisión para primera ronda respecto a la segunda.
 
 **Máximos generales**:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 91.37%                 |              20.29% |
@@ -283,6 +285,7 @@ Para ejecutar esta prueba se utilizó el comando:
 `python3 g01.py --knn --k 31 --poblacion 1000 --holdout --porcentaje-pruebas 25 --prefijo pruebaKnn`
 
 Resultados:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 34.53                  |                24.0 |
@@ -310,6 +313,7 @@ Primeramente, se harán pruebas que afecten la estructura por lo que la función
 
 Promediando algunos de los resultados se obtuvo los siguientes resultados.
 Resultados cuando se esta usando 1 unidad por capa:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 24,91%                 |              25,28% |
@@ -317,6 +321,7 @@ Resultados cuando se esta usando 1 unidad por capa:
 | 2R1R         | 59,56%                 |              58,08% |
 
 Resultados cuando se está usando 10 unidades por capa:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 25,87%                 |              25,76% |
@@ -324,6 +329,7 @@ Resultados cuando se está usando 10 unidades por capa:
 | 2R1R         | 62,81%                 |              61,74% |
 
 Resultados cuando se está usando 20 unidades por capa:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 30,34%                 |              26,86% |
@@ -331,6 +337,7 @@ Resultados cuando se está usando 20 unidades por capa:
 | 2R1R         | 63,81%                 |              62,87% |
 
 Resultados cuando se está usando 30 unidades por capa:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 30,70%                 |              26,56% |
@@ -338,15 +345,16 @@ Resultados cuando se está usando 30 unidades por capa:
 | 2R1R         | 64,51%                 |              60,92% |
 
 Tal vez con estas tablas no se logre ver que en el caso de la precisión del test set, esta empieza a subir y cuando llega a 30 baja, por lo que es probable que un buen número para unidades por capa sea 20 o un número cercano. Esto se verá mejor en los siguientes gráficos. 
-![](https://i.imgur.com/oUBAYzB.png =600x)
+![](https://i.imgur.com/oUBAYzB.png)
 
 Pero no hay que confundir esto con que entre más unidades por capa peor resultado, porque no es cierto, si hacemos una prueba más usando 40 unidades por capa nos daremos cuenta de la verdad.
-![](https://i.imgur.com/ycmepaZ.png =600x)
+![](https://i.imgur.com/ycmepaZ.png)
 
 Por lo que vemos que no sigue bajando y más bien podría empezar a subir.
 
 Ahora nos toca probar la cantidad de capas, como el anterior usaremos relu como función de activación y usaremos 20 unidades por capa, la cantidad de muestras se mantiene igual que el porcentaje de muestras. La prueba de una capa y 20 unidades ya se realizó en las pruebas pasadas, por lo que esta vez se iniciara en 5 capas.
 Resultados cuando se esta usando 1 capa:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 30,34%                 |              26,86% |
@@ -354,6 +362,7 @@ Resultados cuando se esta usando 1 capa:
 | 2R1R         | 63,81%                 |              62,87% |
 
 Resultados cuando se está usando 5 capas:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 25,27%                 |              25,56% |
@@ -361,6 +370,7 @@ Resultados cuando se está usando 5 capas:
 | 2R1R         | 63,05%                 |              61,30% |
 
 Resultados cuando se está usando 10 capas:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 24,41%                 |              25,54% |
@@ -368,6 +378,7 @@ Resultados cuando se está usando 10 capas:
 | 2R1R         | 60,97%                 |              59,40% |
 
 Resultados cuando se está usando 20 capas:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 25,29%                 |              25,18% |
@@ -381,6 +392,7 @@ Estos ejemplos parecen tener un comportamiento diferente a lo que pasaba con uni
 Ahora solo quedan los ejemplos correspondientes a la función de activación, para este informe se utilizarán 3 funciones de activación, relu que ya se ha estado usando, softmax y sigmoid. Para estas pruebas se mantendrán la cantidad de población y el porcentaje para pruebas, para mantener lo que ya se ha probado, usaremos 1 capa y 20 unidades por capa.
 
 Resultados cuando se está usando relu:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 30,34%                 |              26,86% |
@@ -388,6 +400,7 @@ Resultados cuando se está usando relu:
 | 2R1R         | 63,81%                 |              62,87% |
 
 Resultados cuando se está usando softmax:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 24,83%                 |              23,70% |
@@ -395,6 +408,7 @@ Resultados cuando se está usando softmax:
 | 2R1R         | 59,47%                 |              60,76% |
 
 Resultados cuando se está usando sigmoid:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 27,87%                 |              26,02% |
@@ -410,6 +424,7 @@ En este caso se ve claramente como el relu se muestra superior al usar el Test S
 Por otro lado, se debe hacer una aclaración con la función de pérdida utilizada en este proyecto, en todos los ejemplos aquí mostrados se usó la función de pérdida categorical_crossentropy, esto debido a recomendaciones encontradas en la documentación de Keras, que puedes encontrar en el siguiente [link](https://keras.io/losses/) al final de la página. Pero algunas personas también recomiendan binary_crossentropy por dar mejores resultados, luego de realizar algunas pruebas con el predictor, nos dimos cuenta de que, si bien mejora la precisión, la predicción no corresponde, para explicarlo mejor comparemos el mejor resultado que dio con categorical_crossentropy, con un resultado usando binary_crossentropy. 
 
 Resultados cuando se está usando el Test Set:
+
 | Ronda        | categorical_crossentropy| binary_crossentropy |
 | -------------|          -------------:|               -----:|
 | 1R           | 26,86%                 |              93,33% |
@@ -420,6 +435,7 @@ Resultados cuando se está usando el Test Set:
 
 
 Resultados cuando se está usando el Training Set:
+
 | Ronda        | categorical_crossentropy| binary_crossentropy |
 | -------------|          -------------:|               -----:|
 | 1R           | 30,34%                 |              93,33% |
@@ -445,6 +461,7 @@ Para ejecutar esta prueba se utilizó el comando:
 `python3 g01.py --svm --kernel linear --poblacion 1000 --holdout --porcentaje-pruebas 25 --prefijo pruebaSVM`
 
 Resultados:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 40.8                  |                26.4 |
@@ -466,6 +483,7 @@ Para ejecutar esta prueba se utilizó el comando:
 `python3 g01.py --svm --kernel rbf --poblacion 1000 --holdout --porcentaje-pruebas 25 --prefijo pruebaSVM`
 
 Resultados:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 26.93                  |                22.39 |
@@ -476,6 +494,7 @@ Para ejecutar esta prueba se utilizó el comando:
 `python3 g01.py --svm --kernel sigmoid --poblacion 1000 --holdout --porcentaje-pruebas 25 --prefijo pruebaSVM`
 
 Resultados:
+
 | Ronda        | Precisión Training Set | Precisión Test Set  |
 | -------------|          -------------:|               -----:|
 | 1R           | 24.26                  |                18.79 |
