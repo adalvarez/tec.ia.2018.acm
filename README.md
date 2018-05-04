@@ -1,8 +1,6 @@
 <!-- MarkdownTOC -->
 
 - l Proyecto de Inteligencia Artificial
-				- Autores:
-					- Adrián Álvarez - Marlon Agüero - César Borge
 			- Sobre el proyecto:
 - Marco Teórico
 		- K-Nearest Neighbors utilizando K-d Trees:
@@ -35,8 +33,8 @@
 <!-- /MarkdownTOC -->
 
 # l Proyecto de Inteligencia Artificial
-##### Autores:
-###### Adrián Álvarez - Marlon Agüero - César Borge
+Autores:
+Adrián Álvarez - Marlon Agüero - César Borge
 
 #### Sobre el proyecto:
 Durante el mes de febrero y abril, se realizaron en Costa Rica las elecciones presidenciales. El propósito de este proyecto fue **analizar** el comportamiento y los resultados de diferentes **modelos de Inteligencia Artificial** particularmente dentro del área de **machine learning**, al ser utilizados para **predecir** a partir de datos de votantes ficticios, para cual partido político fueron sus votos para la primera y segunda ronda de las elecciones. Para cumplir con dicho objetivo se analizaron los siguientes modelos de inteligencia artificial:
