@@ -1,34 +1,34 @@
-<!-- MarkdownTOC -->
+<!-- MarkdownTOC autolink="true" -->
 
-- l Proyecto de Inteligencia Artificial
-			- Sobre el proyecto:
-- Marco Teórico
-		- K-Nearest Neighbors utilizando K-d Trees:
-		- Regresión Logística:
-		- Árboles de decisión:
-		- Redes Neuronales:
-		- Support Vector Machines:
-		- Cross-Validation:
-- Análisis de modelos:
-		- Regresión Logística:
-		- Árboles de decisión:
-		- K-Nearest Neighbors utilizando K-d Trees:
-		- Redes Neuronales:
-		- Support Vector Machines:
-				- Linear
-				- Polynomial
-				- RBF
-				- Sigmoid
-	- Conclusión
-- Manual de uso:
-	- Instalación  de los requerimientos:
-			- tec.ic.ia.pc1
-			- SciPy con NumPy
-			- Scikit-learn
-			- Keras
-			- tensorflow
-			- Pandas
-	- Uso del sistema
+- [l Proyecto de Inteligencia Artificial](#l-proyecto-de-inteligencia-artificial)
+			- [Sobre el proyecto:](#sobre-el-proyecto)
+- [Marco Teórico](#marco-te%C3%B3rico)
+		- [K-Nearest Neighbors utilizando K-d Trees:](#k-nearest-neighbors-utilizando-k-d-trees)
+		- [Regresión Logística:](#regresi%C3%B3n-log%C3%ADstica)
+		- [Árboles de decisión:](#%C3%81rboles-de-decisi%C3%B3n)
+		- [Redes Neuronales:](#redes-neuronales)
+		- [Support Vector Machines:](#support-vector-machines)
+		- [Cross-Validation:](#cross-validation)
+- [Análisis de modelos:](#an%C3%A1lisis-de-modelos)
+		- [Regresión Logística:](#regresi%C3%B3n-log%C3%ADstica-1)
+		- [Árboles de decisión:](#%C3%81rboles-de-decisi%C3%B3n-1)
+		- [K-Nearest Neighbors utilizando K-d Trees:](#k-nearest-neighbors-utilizando-k-d-trees-1)
+		- [Redes Neuronales:](#redes-neuronales-1)
+		- [Support Vector Machines:](#support-vector-machines-1)
+				- [Linear](#linear)
+				- [Polynomial](#polynomial)
+				- [RBF](#rbf)
+				- [Sigmoid](#sigmoid)
+	- [Conclusión](#conclusi%C3%B3n)
+- [Manual de uso:](#manual-de-uso)
+	- [Instalación  de los requerimientos:](#instalaci%C3%B3n-de-los-requerimientos)
+			- [tec.ic.ia.pc1](#teciciapc1)
+			- [SciPy con NumPy](#scipy-con-numpy)
+			- [Scikit-learn](#scikit-learn)
+			- [Keras](#keras)
+			- [tensorflow](#tensorflow)
+			- [Pandas](#pandas)
+	- [Uso del sistema](#uso-del-sistema)
 
 <!-- /MarkdownTOC -->
 
