@@ -1,3 +1,9 @@
+:toc: macro
+:toc-title:
+:toclevels: 99
+
+# Table of Contents
+toc::[]
 # l Proyecto de Inteligencia Artificial
 ##### Autores:
 ###### Adrián Álvarez - Marlon Agüero - César Borge
