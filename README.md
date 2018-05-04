@@ -1,4 +1,4 @@
-<!-- MarkdownTOC autolink="true" -->
+<!-- MarkdownTOC autolink="true" markdown_preview="github" autoanchor="true"-->
 
 - [l Proyecto de Inteligencia Artificial](#l-proyecto-de-inteligencia-artificial)
 			- [Sobre el proyecto:](#sobre-el-proyecto)
