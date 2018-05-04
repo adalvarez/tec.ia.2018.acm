@@ -114,12 +114,6 @@ def getValues(data, attributes, attr):
     
     return values
 
-#Retorna una lista con los valores que se borraron el el camino, pero que se ocupan igual 
-def getDifValues(valoresOriginales, valoresActuales):
-    valoresFaltantes = list(set(valoresOriginales)-set(valoresActuales))
-
-    return valoresFaltantes
-
 #retorna las filas que a este nivel del arbol siguen siendo validas
 def obtenerFilasValidas(data, attributes, best, val):
     filasValidas = [[]]
@@ -178,27 +172,6 @@ def crearArbol(data, attributes, target):
         
     return tree
 
-def decisionTreeEvaluatorAux(tree, input, target):
-
-    keyAtt = list(tree.keys())[0]
-    subTree = tree[keyAtt]
-    inputValue = input[keyAtt]
-    
-    if(inputValue not in subTree):
-        # Es un nuevo caso no visto del branch
-        return subTree['__PL'] == input[target]
-    branch = subTree[inputValue]
-
-    if(type(branch) is dict):
-        return decisionTreeEvaluatorAux(branch, input, target)
-    else:
-        return branch == input[target]
-
-def decisionTreeEvaluator(tree, input, target):
-    tempTree = tree.copy()
-    return decisionTreeEvaluatorAux(tempTree, input, target)
-
-#Al parecer adrian espera q le llegue un diccionario pero le esta llegando una lista
 def decisionTreePredictAux(tree, input):
     keyAtt = list(tree.keys())[0]
     subTree = tree[keyAtt]
