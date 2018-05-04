@@ -1,7 +1,7 @@
 from operator import itemgetter
 import math
 import operator
-
+puntos_cercanos = []
 
 
 def construir_kd_tree(puntos, profundidad, cantidad_dimensiones):
