@@ -345,9 +345,11 @@ Resultados cuando se está usando 30 unidades por capa:
 | 2R1R         | 64,51%                 |              60,92% |
 
 Tal vez con estas tablas no se logre ver que en el caso de la precisión del test set, esta empieza a subir y cuando llega a 30 baja, por lo que es probable que un buen número para unidades por capa sea 20 o un número cercano. Esto se verá mejor en los siguientes gráficos. 
+
 ![](https://i.imgur.com/oUBAYzB.png)
 
 Pero no hay que confundir esto con que entre más unidades por capa peor resultado, porque no es cierto, si hacemos una prueba más usando 40 unidades por capa nos daremos cuenta de la verdad.
+
 ![](https://i.imgur.com/ycmepaZ.png)
 
 Por lo que vemos que no sigue bajando y más bien podría empezar a subir.
