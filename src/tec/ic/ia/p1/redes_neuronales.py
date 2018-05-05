@@ -25,7 +25,7 @@ def redes_neuronales(XEntranamiento, YEntrenamiento, XEvaluacion, YEvaluacion, c
 	model.add(Dense(len(YEntrenamiento[0]), activation="sigmoid"))
 	# compila el modelo, donde se define a funcion de perdida, el optimizador y la metrica
 	# sgd = SGD(lr=0.01, momentum=0.8, decay=0.0, nesterov=False)
-	model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['accuracy'])#categorical_crossentropy
+	model.compile(loss='categorical_crossentropy', optimizer="adam", metrics=['accuracy'])#categorical_crossentropy
 	# entrena el modelo, aqui se definen los epochs que son las recursiones que hara y el batch sera 
 	# parecido al learning rate de una funcion lineal
 	model.fit(XEntranamiento, YEntrenamiento, epochs = 50, batch_size=50, verbose=0)
@@ -35,7 +35,7 @@ def redes_neuronales(XEntranamiento, YEntrenamiento, XEvaluacion, YEvaluacion, c
 
 	#concatena todos los datos de x, para predecir los resultados
 	predecir = numpy.concatenate((XEvaluacion,XEntranamiento), axis=0)
-	yPredict = model.predict_classes(predecir)
+	yPredict = model.predict_classes(predecir,batch_size = 50)
 	predicciones = []	
 	for i in range(len(predecir)):
 		#print("Predicted=%s" % (yPredict[i]))
