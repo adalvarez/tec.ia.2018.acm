@@ -1,7 +1,43 @@
-# l Proyecto de Inteligencia Artificial
-##### Autores:
-###### Adrián Álvarez - Marlon Agüero - César Borge
+<!-- MarkdownTOC autolink="true" autoanchor="true" -->
 
+- [l Proyecto de Inteligencia Artificial](#l-proyecto-de-inteligencia-artificial)
+	- [Sobre el proyecto:](#sobre-el-proyecto)
+- [Marco Teórico](#marco-te%C3%B3rico)
+	- [K-Nearest Neighbors utilizando K-d Trees:](#k-nearest-neighbors-utilizando-k-d-trees)
+	- [Regresión Logística:](#regresi%C3%B3n-log%C3%ADstica)
+	- [Árboles de decisión:](#%C3%81rboles-de-decisi%C3%B3n)
+	- [Redes Neuronales:](#redes-neuronales)
+	- [Support Vector Machines:](#support-vector-machines)
+	- [Cross-Validation:](#cross-validation)
+- [Análisis de modelos:](#an%C3%A1lisis-de-modelos)
+	- [Regresión Logística:](#regresi%C3%B3n-log%C3%ADstica-1)
+	- [Árboles de decisión:](#%C3%81rboles-de-decisi%C3%B3n-1)
+	- [K-Nearest Neighbors utilizando K-d Trees:](#k-nearest-neighbors-utilizando-k-d-trees-1)
+	- [Redes Neuronales:](#redes-neuronales-1)
+	- [Support Vector Machines:](#support-vector-machines-1)
+		- [Linear](#linear)
+		- [Polynomial](#polynomial)
+		- [RBF](#rbf)
+		- [Sigmoid](#sigmoid)
+	- [Conclusión](#conclusi%C3%B3n)
+- [Manual de uso:](#manual-de-uso)
+	- [Instalación  de los requerimientos:](#instalaci%C3%B3n-de-los-requerimientos)
+		- [tec.ic.ia.pc1](#teciciapc1)
+		- [SciPy con NumPy](#scipy-con-numpy)
+		- [Scikit-learn](#scikit-learn)
+		- [Keras](#keras)
+		- [tensorflow](#tensorflow)
+		- [Pandas](#pandas)
+	- [Uso del sistema](#uso-del-sistema)
+
+<!-- /MarkdownTOC -->
+
+<a id="l-proyecto-de-inteligencia-artificial"></a>
+# l Proyecto de Inteligencia Artificial
+Autores:
+Adrián Álvarez - Marlon Agüero - César Borge
+
+<a id="sobre-el-proyecto"></a>
 #### Sobre el proyecto:
 Durante el mes de febrero y abril, se realizaron en Costa Rica las elecciones presidenciales. El propósito de este proyecto fue **analizar** el comportamiento y los resultados de diferentes **modelos de Inteligencia Artificial** particularmente dentro del área de **machine learning**, al ser utilizados para **predecir** a partir de datos de votantes ficticios, para cual partido político fueron sus votos para la primera y segunda ronda de las elecciones. Para cumplir con dicho objetivo se analizaron los siguientes modelos de inteligencia artificial:
 
@@ -87,8 +123,10 @@ Este generador cuenta con dos funciones:
 
 A continuación se presenta un marco teórico que resume la teoría necesaria, con el fin de que el lector comprenda el análisis de dichos modelos.
 
+<a id="marco-te%C3%B3rico"></a>
 # Marco Teórico
 
+<a id="k-nearest-neighbors-utilizando-k-d-trees"></a>
 ### K-Nearest Neighbors utilizando K-d Trees:
 La idea de **K-Nearest Neighbors** es que dado un ejemplo de entrada, se retornen los `k` ejemplos de entrenamiento con la menor distancia al ejemplo de entrada. El ejemplo de entrada será clasificado con la clase de mayor pluralidad entre los vecinos encontrados. Teniendo en cuenta que cada ejemplo será un vector de `n` dimensiones, la distancia entre cada ejemplo se puede calcular utilizando la fórmula de distancia euclidiana:
 
@@ -108,21 +146,25 @@ En la siguiente imagen se visualiza un K-d Tree de 3 dimensiones:
 
 Para crear un algoritmo de K-Nearest Neighbors utilizando K-d Trees desde cero, se recomienda este [artículo](https://gopalcdas.com/2017/05/24/construction-of-k-d-tree-and-using-it-for-nearest-neighbour-search/).
 
+<a id="regresi%C3%B3n-log%C3%ADstica"></a>
 ### Regresión Logística:
 Antes de entender cómo funciona una regresión logística es importante entender el significado estadístico de `regresión`. Una regresión es un proceso estadístico a través del cual se puede estimar o predecir una relación entre un conjunto de variables. Estas variables tienen una diferencia importante, se dividen en variables independientes (o también llamadas predictoras) y en variables dependientes (predicción). La `regresión logística` es un tipo especial de regresión que se utiliza para explicar y predecir una variable categórica binaria en función de un conjunto de variables independientes que a su vez pueden ser cuantitativas o categóricas. Debido al proceso matemático bajo el cual la regresión logística funciona, es crucial y beneficioso la conversión de variables categóricas a cuantitativas. También resulta conveniente 'binarizar' estas conversiones (categórica->cuantitativa). Otro aspecto importante por realizar para mejorar los resultados de la regresión y al mismo tiempo hacer más justa dicha regresión es normalizar (convertir un conjunto de valores que pueden tener escalas muy diferentes en una escala común) los datos. Regresión logística puede a su vez dar una clasificación no binaria, a través de un concepto llamado `clasificación multinomial` en donde la predicción se puede dar en un conjunto de clases posibles, pero sólo en una clase (excluyente). Para la implementación de cualquier tipo regresión (lineal, logística) se puede utilizar [Tensorflow](https://www.tensorflow.org/tutorials/wide) un framework para hacer Machine Learning. Dicho framework fue utilizado en este proyecto.
 
+<a id="%C3%81rboles-de-decisi%C3%B3n"></a>
 ### Árboles de decisión:
 
 Un `árbol de decisión` toma como entrada un objeto o una situación descrita a través de un conjunto de atributos y devuelve una decisión: el valor previsto de la salida dada la entrada. Un árbol de decisión desarrolla una secuencia de test para poder alcanzar una decisión. Cada nodo interno del árbol corresponde con un test sobre el valor de una de las propiedades, y las ramas que salen del nodo están etiquetadas con los posibles valores de dicha propiedad. Cada nodo hoja del árbol representa el valor que ha de ser devuelto si dicho nodo hoja es alcanzado. Si el árbol de decisión pretende dar una respuesta binaria (aunque puede ser categórica) el aspecto crucial para la construcción de un árbol de decisión es elegir el atributo que separe en mayor medidas las decisiones. Para ello se utiliza `ganancia de información` para obtener una medida de discriminación para seleccionar el mejor atributo para bajar de nivel en el árbol.
 
 ![decisionTree](https://www.tutorialspoint.com/data_mining/images/dm_decision_tree.jpg)
 
+<a id="redes-neuronales"></a>
 ### Redes Neuronales:
 Desde los inicios de la Inteligencia Artificial algunos trabajos pretendían crear redes neuronales artificiales. Este modelo busca que cada neurona (nodo o unidad) tenga una función de activación y se interconecte con otras neuronas. Una neurona será activada cuando una combinación lineal en sus entradas exceda un umbral determinado por la función de activación elegida. Entre las funciones de activación se pueden encontrar la Softmax, Sigmoid, Relu. Para poder implementar una red neuronal en Python de manera sencilla y rápida se puede utilizar [Keras](https://keras.io/), que es un API a alto nivel para la creación de redes neuronales, además es el que se utilizó para realizar este proyecto. También puede seguir el siguiente [tutorial](https://machinelearningmastery.com/tutorial-first-neural-network-python-keras/) simple donde se crea una red neuronal sencilla con Keras. 
 Nota: Los datos necesarios para la creación de las redes neuronales son los mismos utilizados por la regresión.
 
 ![Red Neuronal](https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/RedNeuronalArtificial.png/400px-RedNeuronalArtificial.png)
 
+<a id="support-vector-machines"></a>
 ### Support Vector Machines:
 **Support Vector Machines o SVMs** son un conjunto de algoritmos de aprendizaje supervisado. Se puede utilizar para problemas de clasificación (como el de este proyecto).
 Es decir, se pueden etiquetar una serie de datos para entrenar un SVM y así, construir un modelo que prediga la clase de una muestra de entrada.
@@ -139,6 +181,7 @@ La forma más fácil para separar ambos espacios es utilizando una línea recta,
 Para implementar SVM en este proyecto se utilizó [SciKit Learn](https://machinelearningmastery.com/tutorial-first-neural-network-python-keras/).
 
 
+<a id="cross-validation"></a>
 ### Cross-Validation:
 **Cross-Validation** es un conjunto de algoritmos para entrenar y testear la precisión de un modelo. Para ello separa los datos a disposición en un `Training-Set` y en un `Test-Set`. En este proyecto se implementaron dos formas de Cross-Validation:
 
@@ -148,9 +191,11 @@ Para implementar SVM en este proyecto se utilizó [SciKit Learn](https://machine
 
 
 
+<a id="an%C3%A1lisis-de-modelos"></a>
 # Análisis de modelos:
 A continuación, el análisis desarrollado para cada uno de los modelos mencionados. Para cada prueba se utilizó el modelo para predecir los votos de primera ronda (`1R`), segunda ronda (`2R`) y segunda ronda tomando en cuenta el voto de primera ronda (`2R1R`) y se utilizó Hold Out Cross-Validation usando una población de 5000 votantes, separando un 25% como **test-set**. Excepto en las pruebas de K-Nearest Neighbors que se utilizó una población de 1000 para reducir tiempos de ejecución.
 
+<a id="regresi%C3%B3n-log%C3%ADstica-1"></a>
 ### Regresión Logística:
 El siguiente análisis de regresión logística tuvo como objetivo evaluar un conjunto de diferentes combinaciones para la regularización `l1` y `l2`. Regularización es una técnica usada para evitar o disminuir el overfitting. Overfitting sucede cuando el modelo aprende tanto de los datos de entrenamiento que no es capaz de generalizar y responder acertadamente ante nuevos datos o casos no vistos anteriormente. A continuación se enlistan las diferentes pruebas aplicadas:
 
@@ -198,6 +243,7 @@ También cabe mencionar que dadas las pruebas realizadas con las variaciones de 
 | 2R           | 64.27%                 |              62.80% |
 | 2R1R         | 64.45%                 |              62.77% |
 
+<a id="%C3%81rboles-de-decisi%C3%B3n-1"></a>
 ### Árboles de decisión:
 
 El siguiente análisis de árboles de decisión tuvo como objetivo evaluar diferentes niveles de umbrales de poda para el árbol creado. La poda de un árbol tiene el objetivo de evitar el overfitting Se parte de la población anteriormente indicada al igual que el porcentaje de test set.
@@ -260,6 +306,7 @@ La ejecución de este modelo podría ser dado por:
 `python g01.py --arbol --holdout --porcentaje-pruebas 25 --poblacion 5000 --umbral-poda 0.1`
 
 
+<a id="k-nearest-neighbors-utilizando-k-d-trees-1"></a>
 ### K-Nearest Neighbors utilizando K-d Trees:
 Para este modelo el parámetro a cambiar corresponde a la cantidad de vecinos a buscar dado un ejemplo de entrada. Dicho parámetro será llamado de ahora en adelante `k`. Elegir el valor óptimo de `k` no es una tarea fácil. Normalmente se escoge un valor impar para `k`, para evitar empates a la hora de clasificar.
 Un valor pequeño para `k`, permitirá que el ruido de la información tenga más influencia en los resultados.
@@ -306,6 +353,7 @@ Como conclusión el modelo de K-Nearest Neighbors, al utilizar una muestra de 10
 
 
 
+<a id="redes-neuronales-1"></a>
 ### Redes Neuronales:
 Las pruebas que se realizarán en las redes neuronales siempre serán con una población de 5000 y un 25% de esa población para pruebas. Los parámetros que se pueden cambiar en redes neuronales, son los que afectan la estructura como tal que serían --numero-capas y las --  --unidades-por-capa y el que afecta la función de activación de cada unidad en este caso –funcion-activacion. 
 
@@ -448,6 +496,7 @@ Resultados cuando se está usando el Training Set:
 
 Donde claramente se puede ver que con binary_crossentropy da muchos mejores resultados, pero a la hora de realizar predicciones, no coinciden, es decir, si la red neuronal tiene una precisión de más del 90% debería de acertar en la mayoría de las predicciones, pero luego de probarlo nos dimos cuenta de que esto no fue así, entonces por eso se decidió utilizar categorical_crossentropy, no solo por ser la recomendación de keras, si no por ser la que presentaba resultados más congruentes tanto en precisión, como a la hora de realizar la predicción.   
 
+<a id="support-vector-machines-1"></a>
 ### Support Vector Machines:
 El parámetro a cambiar en SVMs es el `kernel` a utilizar. La librería SciKit Learn, permite utilizar los siguientes `kernel`:
 * `linear` 
@@ -458,6 +507,7 @@ El parámetro a cambiar en SVMs es el `kernel` a utilizar. La librería SciKit L
 Además, al hacer una predicción multiclase como la de la primera ronda, hay que especificar un parámetro llamado `decision_function_shape` con valor `ovo` que corresponde a **one vs one**, un enfoque en el que si hay `n` clases, entonces se construyen `n * (n-1) / 2` clasificadores y cada uno se entrena con datos de dos clases.
 A continuación los resultados al realizar una prueba para cada uno de los diferentes `kernel`:
 
+<a id="linear"></a>
 ##### Linear
 Para ejecutar esta prueba se utilizó el comando:
 `python3 g01.py --svm --kernel linear --poblacion 1000 --holdout --porcentaje-pruebas 25 --prefijo pruebaSVM`
@@ -469,6 +519,7 @@ Resultados:
 | 1R           | 40.8                  |                26.4 |
 | 2R           | 64.66                  |                62.8 |
 | 2R1R         | 65.47                  |                64.0|
+<a id="polynomial"></a>
 ##### Polynomial
 Para ejecutar esta prueba se utilizó el comando:
 `python3 g01.py --svm --kernel poly --poblacion 1000 --holdout --porcentaje-pruebas 25 --prefijo pruebaSVM`
@@ -480,6 +531,7 @@ Resultados:
 | 1R           | 28.13                  |                22.79 |
 | 2R           | 60.26                  |                62.0 |
 | 2R1R         | 60.26                  |                62.0|
+<a id="rbf"></a>
 ##### RBF
 Para ejecutar esta prueba se utilizó el comando:
 `python3 g01.py --svm --kernel rbf --poblacion 1000 --holdout --porcentaje-pruebas 25 --prefijo pruebaSVM`
@@ -491,6 +543,7 @@ Resultados:
 | 1R           | 26.93                  |                22.39 |
 | 2R           | 61.06                  |                63.6 |
 | 2R1R         | 61.06                  |                63.6|
+<a id="sigmoid"></a>
 ##### Sigmoid
 Para ejecutar esta prueba se utilizó el comando:
 `python3 g01.py --svm --kernel sigmoid --poblacion 1000 --holdout --porcentaje-pruebas 25 --prefijo pruebaSVM`
@@ -504,6 +557,7 @@ Resultados:
 | 2R1R         | 60.4                  |                61.6|
 
 
+<a id="conclusi%C3%B3n"></a>
 ## Conclusión
 Todos los modelos analizados en este proyecto, tuvieron una precisión inferior al 70%, lo cual no es para nada óptimo si se desea utilizar esta herramienta para un proyecto crítico. Entre las posibles causas para este fenomeno estan:
 
@@ -518,7 +572,9 @@ La variación de la precisión a la hora de cambiar el tamaño de la población 
 A nivel de implementación queda claro que frameworks como `TensorFlow`, `SciKit Learn` o `Keras` facilitan mucho la creación de modelos.
 
 
+<a id="manual-de-uso"></a>
 # Manual de uso:
+<a id="instalaci%C3%B3n-de-los-requerimientos"></a>
 ## Instalación  de los requerimientos:
 Este proyecto está desarrollado y probado en Python 3.6 con Ubuntu 17.10, es probable que funcione en otros sistemas operativos, pero en este manual se proporciona las instrucciones para Ubuntu, por otro lado, se aclara que no funciona en Python inferior a 3, por lo que primeramente se espera que ya el mismo esté instalado, si aun no lo tiene puede descargarlo de [aquí](https://www.python.org/downloads/).
 
@@ -536,6 +592,7 @@ Una vez instalado pip se podrán instalar todas las bibliotecas necesarias para 
 * tensorflow (Utilizado en regresión lineal y en redes neuronales como backend).
 * Pandas (Utilizado para la normalización discretizada de los datos) 
 
+<a id="teciciapc1"></a>
 #### tec.ic.ia.pc1 
 
 Esta biblioteca también fue creada por nosotros y también está en este mismo repositorio, pero se debe instalar por medio de pip, para su correcto funcionamiento en el proyecto, para esto se deben seguir las siguientes instrucciones.
@@ -548,6 +605,7 @@ Esta biblioteca también fue creada por nosotros y también está en este mismo 
 En la consola debería aparecer un mensaje que dice “Successfully installed tec”
 
 
+<a id="scipy-con-numpy"></a>
 #### [SciPy con NumPy](https://www.scipy.org/)
 
 Primero se instalará SciPy, ésta comúnmente incluye a NumPy, pero para estar seguros también se instalará NumPy, para esto desde cualquier localización se necesita abrir una terminal y en ella escribir lo siguiente:
@@ -558,24 +616,29 @@ Para SciPy
 Para NumPy
 > pip3 install numpy
 
+<a id="scikit-learn"></a>
 #### [Scikit-learn](http://scikit-learn.org/stable/install.html)
 Esta biblioteca tiene algunos requisitos, pero sí ha seguido el manual no debería de preocuparse, porque los requisitos son NumPy en una versión superior o igual a 1.8.2 y SciPy en una versión superior o igual a 0.13.3. Para instalar Scikit se debe escribir el siguiente comando en una terminal:
 
 > pip3 install -U scikit-learn
 
+<a id="keras"></a>
 #### [Keras](https://keras.io/)
 Keras es un API de alto nivel para crear redes neuronales para instalarlo se debe abrir una terminal y escribir el siguiente comando:
 
 > pip3 install -U keras
 
+<a id="tensorflow"></a>
 #### [tensorflow](https://www.tensorflow.org/install/)
 TensorFlow servirá de backend para ser utilizado por keras en las redes neuronales y además es utilizado por la regresión logística. Para su instalación se debe abrir una terminal y escribir lo siguiente:
 > pip3 install -U tensorflow
 
+<a id="pandas"></a>
 #### [Pandas](https://pandas.pydata.org/)
 En este proyecto se utilizó exclusivamente para hacer una normalización discretizada de algunos datos de nuestro set generado. Para instalarlo es necesario abrir una terminal y escribir lo siguiente:
 > pip3 install -U pandas
 
+<a id="uso-del-sistema"></a>
 ## Uso del sistema
 Después de haber instalado todas las bibliotecas necesarias para el proyecto, solo queda poder usar el sistema, para esto se espera que ya está clonado este repositorio y se debe ubicar en la siguiente ruta:
 
